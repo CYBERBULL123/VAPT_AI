@@ -32,6 +32,7 @@ def render_readme():
 # Function to render the main app with better UX and advanced layout
 def render_main_app():
     st.title("🛡️ **Advanced Cybersecurity Report Generator**")
+    st.divider()
     
     # Using tabs with proper emojis
     tabs = st.radio(
