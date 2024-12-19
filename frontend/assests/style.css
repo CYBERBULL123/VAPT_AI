@@ -87,17 +87,17 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     opacity: 0.6;
 }
 
-.stButton, .stFormSubmitButton > button:hover::before {
+.stButton > button:hover::before {
     top: 0%;
     left: 0%;
 }
 
-.stButton, .stFormSubmitButton > button:hover {
+.stButton  > button:hover {
     transform: translateY(-5px) scale(1.05);
     border-color: #00FF00;
 }
 
-.stButton, .stFormSubmitButton > button:active {
+.stButton > button:active {
     transform: translateY(0) scale(0.98);
 }
 
