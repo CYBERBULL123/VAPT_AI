@@ -13,7 +13,7 @@ body {
 }
 
 /* Terminal-Inspired Typography */
-h1, h2, h3, h4, h5, h6 {
+.stHeading, h1, h2, h3, h4, h5, h6 {
     color: #00FF00; /* Green terminal text color */
     text-align: center;
     font-family: 'Courier New', monospace;
