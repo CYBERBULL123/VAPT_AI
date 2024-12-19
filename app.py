@@ -37,7 +37,7 @@ def render_main_app():
 
     # Using tabs with proper emojis
     tabs = st.radio(
-        "Select the type of report to generate 📑",
+        "",
         ("🛡️ VAPT", "🔐 Pentesting", "⚠️ Incident Response Plan", "✅ Compliance", "📊 Risk Assessment"),
         index=0,
         horizontal=True
