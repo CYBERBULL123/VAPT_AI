@@ -20,7 +20,7 @@ load_css("frontend/assests/style.css")
 
 # Function to render README content
 def render_readme():
-    with open('info.md', 'r') as f:
+    with open('info.md', 'r', encoding="utf-8") as f:
         readme_content = f.read()
     st.markdown(readme_content, unsafe_allow_html=True)
     # Wait for user input to proceed

@@ -101,6 +101,23 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     transform: translateY(0) scale(0.98);
 }
 
+.stFormSubmitButton{
+    background: rgba(0, 0, 0, 0.7); /* Dark base for hacker feel */
+    color: #00FF00;
+    border: 2px solid #00FF00;
+    border-radius: 19px;
+    padding: 0.9rem 1.7rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+}
+
 /* Enhanced Input Fields */
 .stTextInput input,
 .stTextArea textarea {
