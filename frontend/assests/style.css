@@ -52,13 +52,16 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
 }
 
 /* Cybersecurity-Inspired Buttons */
-.stButton {
+.stButton,
+.stFormSubmitButton {
     display: flex;
     justify-content: center;
     margin-top: 1.5rem;
 }
 
-.stButton , .stFormSubmitButton> button {
+/* Unified Button Styling */
+.stButton > button,
+.stFormSubmitButton > button {
     background: rgba(0, 0, 0, 0.7); /* Dark base for hacker feel */
     color: #00FF00;
     border: 2px solid #00FF00;
@@ -75,18 +78,8 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     transition: all 0.4s ease-in-out;
 }
 
-.stButton > button::before {
-    content: '';
-    position: absolute;
-    top: -100%;
-    left: -100%;
-    width: 300%;
-    height: 300%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 10%, transparent 70%);
-    transition: all 0.5s ease;
-    opacity: 0.6;
-}
-
+/* Button Glow Effect */
+.stButton > button::before,
 .stFormSubmitButton > button::before {
     content: '';
     position: absolute;
@@ -99,19 +92,30 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     opacity: 0.6;
 }
 
-.stButton > button:hover::before {
+/* Hover and Active States */
+.stButton > button:hover::before,
+.stFormSubmitButton > button:hover::before {
     top: 0%;
     left: 0%;
 }
 
-.stButton  > button:hover {
+.stButton > button:hover,
+.stFormSubmitButton > button:hover {
     transform: translateY(-5px) scale(1.05);
     border-color: #00FF00;
 }
 
-.stButton > button:active {
+.stButton > button:active,
+.stFormSubmitButton > button:active {
     transform: translateY(0) scale(0.98);
 }
+
+/* Ensure Form Buttons Do Not Break Layout */
+.stFormSubmitButton {
+    margin-top: 1.5rem;
+    width: 100%; /* Ensures button fits within the form */
+}
+
 
 
 /* Enhanced Input Fields */
