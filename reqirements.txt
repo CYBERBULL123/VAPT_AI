@@ -4,4 +4,3 @@ requests
 jinja2
 plotly
 pandas
-wkhtmltopdf
