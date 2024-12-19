@@ -1,70 +1,201 @@
-/* General Styling */
+/* Global Reset and Base Styles */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #131313;
     margin: 0;
     padding: 0;
+    background: #1e1e1e;
+    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
 }
 
-/* Header Section */
-.main-title {
-    font-size: 50px;
-    font-weight: 700;
-    color: #2E86AB;
+/* Terminal-Inspired Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: #00FF00; /* Green terminal text color */
     text-align: center;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.4s ease-in-out;
 }
 
-.subtitle {
-    font-size: 22px;
-    color: #5D6D7E;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.divider {
-    margin: 30px 0;
-    border-top: 3px solid #2E86AB;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Layout */
-.stRadio, .stSelectbox, .stTextInput {
+h1::after, h2::after, h3::after, h4::after, h5::after, h6::after {
+    content: '';
+    position: absolute;
     width: 100%;
-    margin: 10px 0;
+    height: 5px;
+    bottom: -8px;
+    left: 0;
+    background: #00FF00;
+    border-radius: 2px;
+    transition: all 0.4s ease;
+    opacity: 0;
+    transform: scaleX(0);
 }
 
-.stButton button {
-    background-color: #2E86AB !important;
-    color: white !important;
-    font-size: 18px !important;
-    padding: 12px 25px !important;
-    border-radius: 8px !important;
-    display: block;
-    margin: 20px auto; /* Centering the button */
+h1:hover::after, h2:hover::after, h3:hover::after, h4:hover::after, h5:hover::after, h6:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
 }
 
-/* Footer */
-.footer {
-    text-align: center;
-    color: #7D8CA3;
-    font-size: 16px;
-    margin-top: 40px;
+h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
+    transform: translateY(-5px) scale(1.05);
+    color: #00FF00;
 }
 
-/* Styling for Inputs */
-.stTextInput input, .stSelectbox select {
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+/* Cybersecurity-Inspired Buttons */
+.stButton > button {
+    background: rgba(0, 0, 0, 0.7); /* Dark base for hacker feel */
+    color: #00FF00;
+    border: 2px solid #00FF00;
+    border-radius: 19px;
+    padding: 0.9rem 1.7rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+}
+
+.stButton > button::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -100%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 10%, transparent 70%);
+    transition: all 0.5s ease;
+    opacity: 0.6;
+}
+
+.stButton > button:hover::before {
+    top: 0%;
+    left: 0%;
+}
+
+.stButton > button:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: #00FF00;
+}
+
+.stButton > button:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Enhanced Input Fields */
+.stTextInput input,
+.stTextArea textarea {
     width: 100%;
+    padding: 0.8rem 1rem;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    background: rgba(25, 25, 25, 0.8);
+    color: #00FF00;
+    box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.3);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-/* Spinner Styling */
-.stSpinner {
-    text-align: center;
-    font-size: 18px;
-    color: #2E86AB;
+.stTextInput input:focus,
+.stTextArea textarea:focus {
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+    transform: scale(1.02);
+}
+
+/* Styling for Form Fields */
+.stForm {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 255, 0, 0.3);
+    margin: 1rem 0;
+}
+
+.stForm .stTextInput input,
+.stForm .stTextArea textarea {
+    background: rgba(0, 0, 0, 0.9);
+    color: #00FF00;
+    padding: 1rem;
+}
+
+.stForm .stButton > button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+}
+
+/* Smooth Animation for Radio Buttons */
+.stRadio > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.stRadio > div > label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.stRadio > div > label:hover {
+    background-color: #5a8b3e;
+    transform: scale(1.1);
+    border-radius: 20px;
+}
+
+.stRadio > div > label.stCssRadio > input {
+    display: none;
+}
+
+.stRadio > div > input[type="radio"]:checked + label {
+    background-color: #ff3700; /* Highlight the selected radio */
+    color: #195624;
+}
+
+/* Progress Bar and Spinner */
+.stProgress {
+    width: 100%;
+    height: 15px;
+    background-color: #333;
+    border-radius: 5px;
+}
+
+.stProgress .stProgressBar {
+    background-color: #00FF00;
+    height: 100%;
+    border-radius: 5px;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+    h1, h2, h3, h4, h5, h6 {
+        font-size: 1.3rem;
+    }
+
+    .stButton > button {
+        font-size: 0.9rem;
+        padding: 0.6rem 1rem;
+    }
+
+    .stForm {
+        width: 90%;
+    }
 }

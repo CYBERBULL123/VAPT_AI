@@ -1,6 +1,7 @@
 import streamlit as st
 from backend.langchain_utils import generate_report
 from backend.report import generate_html_report
+import time
 
 # Set up the page configuration
 st.set_page_config(
@@ -33,7 +34,7 @@ def render_readme():
 def render_main_app():
     st.title("🛡️ **Advanced Cybersecurity Report Generator**")
     st.divider()
-    
+
     # Using tabs with proper emojis
     tabs = st.radio(
         "Select the type of report to generate 📑",
@@ -141,6 +142,9 @@ def render_main_app():
 
     # Handle report generation
     if submitted:
+        with st.spinner("Generating your report... ⏳"):
+                time.sleep(2)
+                st.progress(100)  
         try:
             if tabs == "VAPT":
                 data = {
