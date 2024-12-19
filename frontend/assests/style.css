@@ -52,13 +52,13 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
 }
 
 /* Cybersecurity-Inspired Buttons */
-.stButton, .stFormSubmitButton {
+.stButton {
     display: flex;
     justify-content: center;
     margin-top: 1.5rem;
 }
 
-.stButton, .stFormSubmitButton > button {
+.stButton > button {
     background: rgba(0, 0, 0, 0.7); /* Dark base for hacker feel */
     color: #00FF00;
     border: 2px solid #00FF00;
@@ -75,7 +75,7 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     transition: all 0.4s ease-in-out;
 }
 
-.stButton, .stFormSubmitButton > button::before {
+.stButton > button::before {
     content: '';
     position: absolute;
     top: -100%;
