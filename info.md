@@ -23,7 +23,7 @@ The system combines the power of **Chain of Thought (CoT)**, **Theory of Thought
 1. **Analysis and Reasoning**:
     - 🤖 **Self-Thinking LLM Agent**: Using Chain of Thought (CoT), the model performs real-time reasoning on the findings, analyzing possible attack vectors, their severity, and their implications.
     - 🧠 **Theory of Thought (ToT)**: The AI assesses the context of each finding, linking it to previous data and lessons learned from past interactions.
-    - 🔍 **RAM**: With Reasoning and Analysis Mechanism, the model cross-references vulnerabilities against known exploits, refining its predictions based on the threat landscape.
+    - 🔍 **RAP (Recursive Action Planning)**: Through iterative planning and refinement, the model evaluates vulnerabilities, tests hypothetical attack scenarios, and dynamically adjusts its approach based on evolving data. This ensures comprehensive risk assessment.
 
 2. **Report Generation**:
     - 📋 **Dynamic Report Creation**: The system generates a detailed report based on the analysis, providing in-depth reasoning for each identified vulnerability.
@@ -36,16 +36,15 @@ The system combines the power of **Chain of Thought (CoT)**, **Theory of Thought
 
 ## **System Architecture**
 
-### **Core Components**
+##### **Core Components**
 
 1. **Frontend (Streamlit Interface)**:
    - **Streamlit** powers the user interface where users can input system vulnerabilities, initiate tests, and view generated reports.
-   - **Interactive Dashboard**: The interface is designed to display real-time insights, testing progress, and vulnerabilities discovered.
 
 2. **Backend (LLM & Reasoning Engine)**:
    - **Large Language Models (LLMs)**: The LLMs form the core of the reasoning engine, processing reconnaissance data and applying Chain of Thought (CoT) and Theory of Thought (ToT).
-   - **Reasoning and Analysis (RAM)**: RAM is employed to provide detailed, actionable analysis of vulnerabilities, including the context and potential impact of each finding.
-   
+   - **Recursive Action Planning (RAP)**: RAP evaluates findings iteratively, simulating potential attack vectors, and adjusting actions dynamically to identify and prioritize critical vulnerabilities.
+
    
 3. **Report Generation Engine**:
    - **HTML Templates**: Uses predefined templates to create formatted reports, enriched with reasoning, findings, and graphical visualizations.
@@ -56,17 +55,18 @@ The system combines the power of **Chain of Thought (CoT)**, **Theory of Thought
 
 ## **Methodologies**
 
-### **1. Chain of Thought (CoT)**:
+##### **1. Chain of Thought (CoT)**:
 - 🧠 **Reasoning Process**: The system applies CoT to logically process vulnerabilities and perform real-time analysis, explaining its reasoning in each step of the report.
 - 🔄 **Iterative Reasoning**: As the system analyzes vulnerabilities, it revises its understanding based on new data and findings.
 
-### **2. Theory of Thought (ToT)**:
+##### **2. Theory of Thought (ToT)**:
 - 🌐 **Contextual Awareness**: The system uses ToT to consider past incidents, making its reasoning contextually aware and improving its vulnerability predictions.
 - 🧩 **Holistic View**: By applying ToT, the model connects current vulnerabilities to historical attack trends, ensuring more informed conclusions.
 
-### **3. Reasoning and Analysis Mechanism (RAM)**:
-- 🔍 **Cross-Referencing**: RAM uses large-scale data and knowledge of known vulnerabilities and attack techniques to provide a detailed impact analysis.
-- ⚡ **Threat Assessment**: RAM generates risk levels based on severity and context, offering insights into the urgency of remediation.
+##### **3. Recursive Action Planning (RAP)**:
+- 🔍 **Iterative Vulnerability Assessment**: RAP uses a dynamic, recursive approach to test potential attack vectors and adjust strategies based on findings.
+- ⚡ **Comprehensive Risk Analysis**: RAP ensures that every possible threat scenario is evaluated, providing detailed, prioritized vulnerability assessments.
+- 🌀 **Adaptability**: The model refines its approach as it uncovers new data, simulating various real-world attack scenarios for a deeper understanding.
 
 ---
 
@@ -83,11 +83,3 @@ The system combines the power of **Chain of Thought (CoT)**, **Theory of Thought
 1. **Expand Self-Improvement Mechanism**: Enhance the feedback loop to allow the system to upgrade autonomously, reducing the need for human intervention.
 2. **Integrate More Threat Data Sources**: Enrich vulnerability assessments with a wider range of threat data, including zero-day exploits.
 3. **Scale for Enterprise**: Optimize the system for large-scale deployments, handling more extensive networks and more complex testing scenarios.
-
----
-
-## **Conclusion**
-
-The **Cybersecurity Recon & Report Generation System** is a breakthrough in cybersecurity automation, leveraging the power of advanced LLMs, reasoning mechanisms, and automated penetration testing. While it is not fully autonomous, it continuously improves its capabilities through self-thought processes, making it a highly effective tool for cybersecurity professionals. With the ability to generate detailed, insightful reports, this system aids organizations in protecting their digital assets from evolving threats.
-
----
