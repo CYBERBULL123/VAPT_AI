@@ -10,10 +10,11 @@ body {
     align-items: center;
     justify-content: center;
     overflow-x: hidden;
+
 }
 
 /* Terminal-Inspired Typography */
-.stHeading, h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
     color: #00FF00; /* Green terminal text color */
     text-align: center;
     font-family: 'Courier New', monospace;
@@ -51,6 +52,12 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
 }
 
 /* Cybersecurity-Inspired Buttons */
+.stButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
 .stButton > button {
     background: rgba(0, 0, 0, 0.7); /* Dark base for hacker feel */
     color: #00FF00;
@@ -114,28 +121,6 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     transform: scale(1.02);
 }
 
-/* Styling for Form Fields */
-.stForm {
-    background: rgba(0, 0, 0, 0.7);
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0, 255, 0, 0.3);
-    margin: 1rem 0;
-}
-
-.stForm .stTextInput input,
-.stForm .stTextArea textarea {
-    background: rgba(0, 0, 0, 0.9);
-    color: #00FF00;
-    padding: 1rem;
-}
-
-.stForm .stButton > button {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.2rem;
-}
-
 /* Smooth Animation for Radio Buttons */
 .stRadio > div {
     display: flex;
@@ -170,18 +155,31 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     color: #195624;
 }
 
-/* Progress Bar and Spinner */
-.stProgress {
+/* Blurred Glass Panels */
+.st-emotion-cache-1xw8zd0,
+.st-emotion-cache-qcpnpn {
     width: 100%;
-    height: 15px;
-    background-color: #333;
-    border-radius: 5px;
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid #00FF00;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 255, 0, 0.465);
+    text-align: center;
+    animation: glowPanel 3s infinite alternate;
+    transition: transform 0.4s ease;
 }
 
-.stProgress .stProgressBar {
-    background-color: #00FF00;
-    height: 100%;
-    border-radius: 5px;
+.st-emotion-cache-1xw8zd0:hover,
+.st-emotion-cache-qcpnpn:hover {
+    transform: translateY(-10px);
+}
+
+@keyframes glowPanel {
+    0% { box-shadow: 0 8px 16px rgba(0, 255, 0, 0.3); }
+    100% { box-shadow: 0 10px 20px rgba(0, 255, 0, 0.7); }
 }
 
 /* Responsive Tweaks */
@@ -195,7 +193,8 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
         padding: 0.6rem 1rem;
     }
 
-    .stForm {
-        width: 90%;
+    .st-emotion-cache-1xw8zd0,
+    .st-emotion-cache-qcpnpn {
+        padding: 1rem;
     }
 }
