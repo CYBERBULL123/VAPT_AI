@@ -3,11 +3,17 @@ from langchain.chains import LLMChain
 from langchain.agents import initialize_agent, Tool, AgentType
 from langchain.memory import ConversationBufferMemory
 from langchain_google_genai import ChatGoogleGenerativeAI
+import streamlit as st
+
+
+# Configure API Key
+gemini_key = st.secrets["api_keys"]["gemini_api_key"]
+
 
 # Initialize GEMINI LLM for reasoning tasks
 llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-flash-latest",
-    api_key="AIzaSyDnfECGAlP3640PdfaP6ez9xF5oM6aP15I",
+    api_key=gemini_key,
     temperature=0.7,
     max_tokens=3000,  # Allow for detailed responses
 )
