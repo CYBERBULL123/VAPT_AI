@@ -3,5 +3,4 @@ langchain
 requests
 jinja2
 plotly
-pandas
 langchain-google-genai
