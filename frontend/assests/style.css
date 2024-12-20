@@ -185,7 +185,6 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     border-radius: 15px;
     box-shadow: 0 6px 12px rgba(0, 255, 0, 0.465);
     text-align: center;
-    animation: glowPanel 3s infinite alternate;
     transition: transform 0.4s ease;
 }
 
@@ -194,10 +193,6 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     transform: translateY(-10px);
 }
 
-@keyframes glowPanel {
-    0% { box-shadow: 0 8px 16px rgba(0, 255, 0, 0.3); }
-    100% { box-shadow: 0 10px 20px rgba(0, 255, 0, 0.7); }
-}
 
 /* Responsive Tweaks */
 @media (max-width: 768px) {
