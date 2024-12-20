@@ -1,4 +1,5 @@
-### **Agentic Report Generator Module (ARGM)** - Cyber Report Automation Platform**
+# **Agentic Report Generator Module (ARGM)** 
+- Cyber Report Automation Platform
 
 **OxSecure Intelligence** is a next-gen platform that automates Vulnerability Assessment and Penetration Testing (VAPT) report generation using **Generative AI** and **Machine Learning**. It simplifies the creation of detailed, professional VAPT reports, integrating seamlessly with vulnerability scanners for efficient analysis.
 
