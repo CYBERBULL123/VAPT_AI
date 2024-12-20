@@ -279,17 +279,13 @@ def render_main_app():
 
             submitted = st.form_submit_button("Generate Risk Assessment Report")
 
-
-
-    # Handle report generation
+   # Handle report generation
     if submitted:
-        with st.spinner("Generating your report... ⏳"):
-            time.sleep(2)
-            st.progress(100)
         try:
             # Initialize data to prevent undefined variable issues
             data = {}
 
+            # Collect data based on selected tab
             if tabs == "🛡️ VAPT":
                 data = {
                     "project_name": project_name,
@@ -349,94 +345,24 @@ def render_main_app():
             # Clean the tabs variable to remove emojis and unnecessary characters
             clean_tab_key = ''.join(char for char in tabs if char.isalnum() or char.isspace()).strip()
 
-            # Generate the report
-            report_content = generate_report(clean_tab_key, data)
+            with st.spinner("Generating your report... ⏳"):
+                # Generate the report
+                report_content = generate_report(clean_tab_key, data)
+                time.sleep(2)  # Simulate time for LLM processing
 
-            # Generate HTML report using cleaned tab key
+            # Display the report in a more structured preview
+            st.markdown("### Generated Report (Preview):")
+            st.markdown("---")
+            for section, content in report_content.items():
+                st.markdown(f"#### **{section}:**")
+                st.markdown(content if content else "_No data provided._")
+                st.markdown("---")
+
+            # Generate HTML report
             template_file = f"backend/templates/{clean_tab_key.lower().replace(' ', '_')}_template.html"
             html_content = generate_html_report(data, template_file)
 
-            # Display the report in Markdown format
-            st.markdown("### Generated Report (Preview):")
-
-            # Prepare the Markdown content for all data fields
-            st.markdown = f"""
-            ## {tabs} Report for {data.get('project_name', data.get('incident_name', 'Unnamed Project'))}
-
-            **Client Name:** {data.get('client_name', 'N/A')}  
-            **Assessment Date:** {data.get('assessment_date', 'N/A')}  
-            **Assessor Name:** {data.get('assessor_name', 'N/A')}  
-
-            ---
-
-            ### High-Level Findings:
-            {data.get('high_level_findings', 'No high-level findings provided.')}
-
-            ---
-
-            ### Detailed Findings:
-            {data.get('detailed_findings', 'No detailed findings provided.')}
-
-            ---
-
-            ### Risk Analysis:
-            - **Risk Description:** {data.get('risk_description', 'No risk description provided.')}  
-            - **Business Impact:** {data.get('business_impact', 'No business impact provided.')}
-
-            ---
-
-            ### Mitigation Strategies:
-            {data.get('mitigation_strategies', 'No mitigation strategies provided.')}
-
-            ---
-
-            ### Additional Notes:
-            {data.get('additional_notes', 'No additional notes provided.')}
-
-            ---
-
-            ### Tools and Steps (For Pentesting):
-            - **Tools Used:** {data.get('tools_used', 'N/A')}  
-            - **Steps Taken:** {data.get('steps_taken', 'N/A')}
-
-            ---
-
-            ### Incident Details (For Incident Response):
-            - **Incident Name:** {data.get('incident_name', 'N/A')}  
-            - **Incident Date:** {data.get('incident_date', 'N/A')}  
-            - **Incident Description:** {data.get('incident_description', 'N/A')}  
-            - **Actions Taken:** {data.get('actions_taken', 'N/A')}  
-            - **Lessons Learned:** {data.get('lessons_learned', 'N/A')}  
-            - **Future Prevention:** {data.get('future_prevention', 'N/A')}
-
-            ---
-
-            ### Compliance Details (For Compliance Reports):
-            - **Compliance Type:** {data.get('compliance_type', 'N/A')}  
-            - **Compliance Findings:** {data.get('compliance_findings', 'N/A')}  
-            - **Compliance Recommendations:** {data.get('compliance_recommendations', 'N/A')}
-
-            ---
-
-            ### Risk Assessment (For Risk Assessment Reports):
-            - **Risks Identified:** {data.get('risks_identified', 'N/A')}  
-            - **Risk Severity:** {data.get('risk_severity', 'N/A')}  
-            - **Risk Mitigation Plan:** {data.get('risk_mitigation_plan', 'N/A')}
-
-            ---
-
-            ### Summary of Findings:
-            - **Tools and Technologies Used:** {data.get('tools_used', 'N/A')}
-            - **Actions Taken and Next Steps:** {data.get('steps_taken', 'N/A')}
-            - **Future Recommendations:** {data.get('mitigation_strategies', 'N/A')}
-
-            ---
-
-            **Note:** The report has been generated based on the provided data. Please verify and cross-check with your actual findings and observations.
-            """
-
-
-            # Download option
+            # Display download button
             st.download_button(
                 label="📥 Download Report HTML",
                 data=html_content,
@@ -448,6 +374,7 @@ def render_main_app():
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
+
 
 
 # Main Streamlit app logic
