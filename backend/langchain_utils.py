@@ -184,7 +184,7 @@ def generate_report(report_type: str, data: dict) -> dict:
         "Executive Summary": tot_responses[0],
         "Technical Findings": tot_responses[1],
         "Risk Analysis": tot_responses[2],
-        "Recommendations": tot_responses[3],
+        "Recommendations": tot_responses[1],
         "Final Report": final_response,
         "Agent Reasoning Response": agent_response
     }

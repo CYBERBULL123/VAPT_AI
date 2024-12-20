@@ -12,56 +12,65 @@
             color: #333;
             line-height: 1.6;
         }
-        h1, h2, h3 {
-            color: #2C3E50;
-            margin-bottom: 10px;
-        }
         header, footer {
+            background-color: #2C3E50;
+            color: #fff;
             text-align: center;
             padding: 20px;
-            background-color: #2C3E50;
-            color: white;
+            border-radius: 8px;
         }
-        header h1 {
-            font-size: 28px;
+        header h1, footer p {
             margin: 0;
+            font-size: 1.5rem;
         }
-        header p, footer p {
-            margin: 5px 0;
-            font-size: 16px;
+        h2 {
+            color: #2C3E50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #34495E;
+            margin-bottom: 10px;
         }
         .section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
         }
-        .content {
-            padding-left: 20px;
+        .content p {
+            margin-bottom: 10px;
         }
         .findings, .recommendations, .risk-analysis, .compliance-details {
             margin-top: 10px;
         }
         .findings p, .recommendations p, .risk-analysis p, .compliance-details p {
-            background-color: #ecf0f1;
+            background-color: #f7f9fc;
             border-left: 5px solid #3498db;
             padding: 10px;
-            margin: 5px 0;
-            border-radius: 3px;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
-        .risk-analysis {
-            background-color: #f9e79f;
-            padding: 10px;
-            border-left: 5px solid #f39c12;
-            margin: 10px 0;
-            border-radius: 3px;
+        .critical {
+            background-color: #f9d6d5;
+            border-left: 5px solid #E74C3C;
         }
-        .compliance-details {
-            background-color: #f9c9c9;
-            padding: 10px;
-            border-left: 5px solid #e74c3c;
-            margin: 10px 0;
-            border-radius: 3px;
+        .high {
+            background-color: #ffeaa7;
+            border-left: 5px solid #F39C12;
         }
-        footer {
-            margin-top: 50px;
+        .medium {
+            background-color: #d6f5d6;
+            border-left: 5px solid #27AE60;
+        }
+        .low {
+            background-color: #eaf2f8;
+            border-left: 5px solid #3498DB;
+        }
+        footer p {
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -74,6 +83,11 @@
     </header>
 
     <section class="section">
+        <h2>Introduction</h2>
+        <p>{{ introduction }}</p>
+    </section>
+
+    <section class="section">
         <h2>Executive Summary</h2>
         <p>{{ summary }}</p>
     </section>
@@ -82,7 +96,11 @@
         <h2>Compliance Findings</h2>
         <div class="findings">
             {% for finding in findings %}
-                <p>{{ finding }}</p>
+                <p class="{{ finding.severity.lower() }}">
+                    <strong>Finding:</strong> {{ finding.title }} <br>
+                    <strong>Description:</strong> {{ finding.description }} <br>
+                    <strong>Severity:</strong> {{ finding.severity }}
+                </p>
             {% endfor %}
         </div>
     </section>
@@ -91,13 +109,17 @@
         <h2>Risk Analysis</h2>
         <div class="risk-analysis">
             <p><strong>Risk Description:</strong> {{ risk_analysis }}</p>
+            <p><strong>Likelihood:</strong> {{ risk_likelihood }}</p>
+            <p><strong>Impact:</strong> {{ risk_impact }}</p>
         </div>
     </section>
 
     <section class="section">
         <h2>Compliance Details</h2>
         <div class="compliance-details">
+            <p><strong>Applicable Standards:</strong> {{ compliance_standards }}</p>
             <p><strong>Business Impact:</strong> {{ business_impact }}</p>
+            <p><strong>Gaps Identified:</strong> {{ gaps_identified }}</p>
         </div>
     </section>
 
@@ -105,22 +127,24 @@
         <h2>Recommendations</h2>
         <div class="recommendations">
             {% for recommendation in recommendations %}
-                <p>{{ recommendation }}</p>
+                <p>
+                    <strong>Recommendation:</strong> {{ recommendation.title }} <br>
+                    <strong>Description:</strong> {{ recommendation.description }}
+                </p>
             {% endfor %}
         </div>
     </section>
 
     {% if additional_notes %}
-        <section class="section">
-            <h2>Additional Notes</h2>
-            <div class="compliance-details">
-                <p>{{ additional_notes }}</p>
-            </div>
-        </section>
+    <section class="section">
+        <h2>Additional Notes</h2>
+        <p>{{ additional_notes }}</p>
+    </section>
     {% endif %}
 
     <footer>
         <p>Report Generated on {{ assessment_date }}</p>
+        <p><strong>OxSecure Intelligence</strong> - Your Trusted Compliance Partner</p>
     </footer>
 </body>
 </html>

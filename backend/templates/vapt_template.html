@@ -7,118 +7,161 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            margin: 40px;
-            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f9fc;
             color: #333;
             line-height: 1.6;
         }
-        h1, h2, h3 {
-            color: #2C3E50;
-            margin-bottom: 10px;
-        }
-        header, footer {
-            text-align: center;
-            padding: 20px;
+        header {
             background-color: #2C3E50;
             color: white;
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 5px solid #3498DB;
         }
         header h1 {
-            font-size: 28px;
+            font-size: 32px;
             margin: 0;
         }
-        header p, footer p {
+        header p {
+            font-size: 18px;
             margin: 5px 0;
-            font-size: 16px;
+        }
+        .container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-size: 24px;
+            color: #2C3E50;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498DB;
+            padding-bottom: 5px;
+        }
+        p {
+            margin: 10px 0;
         }
         .section {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
-        .content {
-            padding-left: 20px;
-        }
-        .findings, .recommendations, .risk-analysis, .business-impact {
-            margin-top: 10px;
-        }
-        .findings p, .recommendations p, .risk-analysis p, .business-impact p {
-            background-color: #ecf0f1;
-            border-left: 5px solid #3498db;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 3px;
-        }
-        .risk-description {
-            background-color: #f9e79f;
-            padding: 10px;
-            border-left: 5px solid #f39c12;
+        .highlight {
+            background-color: #F4F6F7;
+            border-left: 5px solid #3498DB;
+            padding: 15px;
+            border-radius: 4px;
             margin: 10px 0;
-            border-radius: 3px;
         }
-        .business-impact {
-            background-color: #f9c9c9;
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th, .table td {
+            border: 1px solid #ddd;
             padding: 10px;
-            border-left: 5px solid #e74c3c;
-            margin: 10px 0;
-            border-radius: 3px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #3498DB;
+            color: white;
+        }
+        .table td {
+            background-color: #f9f9f9;
         }
         footer {
+            background-color: #2C3E50;
+            color: white;
+            text-align: center;
+            padding: 20px;
             margin-top: 50px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>{{ project_name }} - VAPT Report</h1>
+        <h1>{{ project_name }} - Vulnerability Assessment & Penetration Testing (VAPT) Report</h1>
         <p><strong>Client Name:</strong> {{ client_name }}</p>
         <p><strong>Assessment Date:</strong> {{ assessment_date }}</p>
         <p><strong>Assessor:</strong> {{ assessor_name }}</p>
     </header>
 
-    <section class="section">
-        <h2>Executive Summary</h2>
-        <p>{{ high_level_findings }}</p>
-    </section>
-
-    <section class="section">
-        <h2>Findings</h2>
-        <div class="findings">
-            {% for finding in detailed_findings %}
-                <p>{{ finding }}</p>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="section">
-        <h2>Risk Analysis</h2>
-        <div class="risk-description">
-            <p><strong>Risk Description:</strong> {{ risk_description }}</p>
-        </div>
-    </section>
-
-    <section class="section">
-        <h2>Business Impact</h2>
-        <div class="business-impact">
-            <p><strong>Impact:</strong> {{ business_impact }}</p>
-        </div>
-    </section>
-
-    <section class="section">
-        <h2>Mitigation Strategies</h2>
-        <div class="recommendations">
-            <p>{{ mitigation_strategies }}</p>
-        </div>
-    </section>
-
-    {% if additional_notes %}
+    <div class="container">
         <section class="section">
-            <h2>Additional Notes</h2>
-            <div class="recommendations">
-                <p>{{ additional_notes }}</p>
+            <h2>Executive Summary</h2>
+            <p>The VAPT assessment conducted for {{ client_name }} highlights key vulnerabilities identified within the system, their potential impact, and suggested remediation strategies. This report serves as a roadmap to improve the organization's security posture and minimize risks.</p>
+            <div class="highlight">
+                <strong>Key Findings:</strong> {{ high_level_findings }}
             </div>
         </section>
-    {% endif %}
+
+        <section class="section">
+            <h2>Findings Overview</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Vulnerability</th>
+                        <th>Description</th>
+                        <th>Severity</th>
+                        <th>Likelihood</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for finding in detailed_findings %}
+                    <tr>
+                        <td>{{ finding.title }}</td>
+                        <td>{{ finding.description }}</td>
+                        <td>{{ finding.severity }}</td>
+                        <td>{{ finding.likelihood }}</td>
+                        <td>{{ finding.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="section">
+            <h2>Risk Analysis</h2>
+            <p><strong>Risk Description:</strong> {{ risk_description }}</p>
+            <div class="highlight">
+                <strong>Potential Impact:</strong> {{ potential_impact }}
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Business Impact</h2>
+            <div class="highlight">
+                <strong>Impact on Operations:</strong> {{ business_impact }}
+            </div>
+            <p>Mitigating these risks will safeguard critical operations and reduce exposure to potential cyberattacks.</p>
+        </section>
+
+        <section class="section">
+            <h2>Mitigation Strategies</h2>
+            <ul>
+                {% for strategy in mitigation_strategies %}
+                <li><strong>{{ strategy.title }}</strong>: {{ strategy.description }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        {% if additional_notes %}
+        <section class="section">
+            <h2>Additional Notes</h2>
+            <p>{{ additional_notes }}</p>
+        </section>
+        {% endif %}
+    </div>
 
     <footer>
-        <p>Report Generated on {{ assessment_date }}</p>
+        <p>Generated by OxSecure Intelligence on {{ assessment_date }}</p>
+        <p>Enhancing Security Through Intelligence & Automation</p>
     </footer>
 </body>
 </html>
