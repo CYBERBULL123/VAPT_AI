@@ -9,25 +9,34 @@ llm = ChatGoogleGenerativeAI(
     model="gemini-1.5-flash-latest",
     api_key="AIzaSyDnfECGAlP3640PdfaP6ez9xF5oM6aP15I",
     temperature=0.7,
-    max_tokens=2000,
+    max_tokens=3000,  # Allow for detailed responses
 )
 
-# Define tools for agent
+# Define tools for the agent
 tools = [
     Tool(
         name="Analyze Findings",
         func=lambda x: analyze_findings(x),
-        description="Analyze the cybersecurity findings to identify vulnerabilities, risks, and threats."
+        description=(
+            "Analyze cybersecurity findings to identify vulnerabilities, risks, and threats. "
+            "Provide a categorized analysis with potential impacts and related CVEs where applicable."
+        )
     ),
     Tool(
         name="Evaluate Risks",
         func=lambda x: evaluate_risks(x),
-        description="Evaluate the risks based on the findings, considering exploitability, impact, and likelihood."
+        description=(
+            "Evaluate risks based on identified vulnerabilities. "
+            "Include severity, likelihood of exploitation, and potential business impacts."
+        )
     ),
     Tool(
         name="Generate Recommendations",
         func=lambda x: generate_recommendations(x),
-        description="Generate actionable recommendations based on the analysis and risk evaluation."
+        description=(
+            "Generate actionable recommendations to mitigate identified risks. "
+            "Include preventive measures, detection strategies, and response plans."
+        )
     )
 ]
 
@@ -42,7 +51,7 @@ agent = initialize_agent(
 
 # Reasoning Task: Using the agent to reason through findings
 def agent_reasoning_task(data: dict) -> str:
-    agent_input = f"Task: Analyze and process the following findings.\nInput: {data['findings']}"
+    agent_input = f"Task: Analyze and process the following findings.\nInput: {data}"
     response = agent.run(agent_input)
     return response
 
@@ -60,37 +69,68 @@ def generate_recommendations(data):
 def generate_cot_prompt(report_type: str, data: dict) -> str:
     report_prompts = {
         "VAPT": """
-        Generate a Vulnerability Assessment and Penetration Testing (VAPT) report using the following structure:
-        1. **Executive Summary**: High-level overview of vulnerabilities discovered.
-        2. **Technical Findings**: Detailed analysis of vulnerabilities.
-        3. **Risk Analysis**: Evaluate impact, exploitability, and likelihood.
-        4. **Recommendations**: Actionable remediation steps.
+        Generate a comprehensive Vulnerability Assessment and Penetration Testing (VAPT) report. 
+        The structure should include:
+        1. **Executive Summary**: 
+            - Overview of the engagement's scope, objectives, and methodology.
+            - High-level findings summary with impact on the business.
+        2. **Technical Findings**: 
+            - Detailed descriptions of vulnerabilities identified.
+            - Include screenshots, CVEs, and proof-of-concept exploits where relevant.
+        3. **Risk Analysis**: 
+            - Evaluate risks considering severity, exploitability, and potential business impacts.
+            - Provide a likelihood-impact matrix for prioritization.
+        4. **Recommendations**: 
+            - Detailed actionable steps for mitigation.
+            - Short-term, mid-term, and long-term recommendations.
         """,
         "Pentesting": """
-        Generate a detailed Penetration Testing report using the following structure:
-        1. **Introduction**: Scope of the test.
-        2. **Methodology**: Approach and tools used.
-        3. **Findings**: Detailed analysis.
-        4. **Recommendations**: Remediation actions.
+        Generate a detailed Penetration Testing report. 
+        The structure should include:
+        1. **Introduction**: 
+            - Scope, methodology, and tools used during the test.
+        2. **Findings**: 
+            - Categorized vulnerabilities with detailed descriptions.
+            - Include screenshots, evidence, and possible exploitation scenarios.
+        3. **Exploitation Details**: 
+            - Techniques used, tools leveraged, and success rates of attempts.
+        4. **Recommendations**: 
+            - Steps to remediate each vulnerability with priority levels.
         """,
         "Incident Response Plan": """
-        Generate an Incident Response Plan using the following structure:
-        1. **Introduction**: Objectives and scope.
-        2. **Incident Classification**: Severity levels.
-        3. **Workflow**: Steps for identification, containment, and recovery.
-        4. **Roles**: Responsibilities of team members.
+        Generate an Incident Response Plan. 
+        The structure should include:
+        1. **Introduction**: 
+            - Objectives, scope, and purpose of the plan.
+        2. **Incident Classification**: 
+            - Categorize incidents based on severity levels (e.g., low, medium, high).
+        3. **Workflow**: 
+            - Outline detection, containment, eradication, and recovery steps.
+        4. **Roles and Responsibilities**: 
+            - Define roles for team members with a RACI matrix (Responsible, Accountable, Consulted, Informed).
         """,
         "Compliance": """
-        Generate a Compliance Report using the following structure:
-        1. **Introduction**: Scope of assessment.
-        2. **Findings**: Compliance and non-compliance areas.
-        3. **Recommendations**: Steps to ensure compliance.
+        Generate a Compliance Report. 
+        The structure should include:
+        1. **Introduction**: 
+            - Scope and objectives of the assessment.
+            - Frameworks considered (e.g., ISO 27001, GDPR, HIPAA).
+        2. **Findings**: 
+            - Detailed sections for compliance gaps and achieved milestones.
+        3. **Recommendations**: 
+            - Steps to address gaps and ensure ongoing compliance.
         """,
         "Risk Assessment": """
-        Generate a Risk Assessment report using the following structure:
-        1. **Risk Identification**: Vulnerabilities and threats.
-        2. **Risk Evaluation**: Severity and likelihood analysis.
-        3. **Mitigation Plan**: Steps to reduce risks.
+        Generate a Risk Assessment Report. 
+        The structure should include:
+        1. **Risk Identification**: 
+            - Detailed listing of risks including vulnerabilities, threats, and weaknesses.
+        2. **Risk Evaluation**: 
+            - Severity analysis using a qualitative or quantitative approach.
+            - Include a risk heat map for visualization.
+        3. **Mitigation Plan**: 
+            - Steps to reduce risks with resource allocation.
+            - Residual risk overview after implementation.
         """
     }
 
@@ -100,7 +140,7 @@ def generate_cot_prompt(report_type: str, data: dict) -> str:
 def generate_tree_of_thought(data: dict, steps: list) -> list:
     responses = []
     for step in steps:
-        prompt = f"Step: {step}\nInput Data: {data['findings']}\n"
+        prompt = f"Step: {step}\nInput Data: {data}\n"
         response = llm.predict(prompt)
         responses.append(response)
     return responses
@@ -112,7 +152,7 @@ def recursive_refinement(prompt: str, max_iterations: int = 3) -> str:
         try:
             response = llm.predict(current_prompt)
             current_prompt = f"Refine the following output:\n{response}"
-        except Exception:
+        except Exception as e:
             break
     return current_prompt
 
