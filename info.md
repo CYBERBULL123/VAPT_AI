@@ -1,6 +1,6 @@
 ## **Project Overview**
 
-The **Cybersecurity Report Generation System** is an advanced AI-powered tool designed to automate and streamline the generation of detailed reports. At its core, it integrates **LLM-based agentic models** for intelligent reasoning, analysis, and report creation. 
+The **Agentic Report Generator Module (ARGM)** is an advanced AI-powered tool from Oxsecure Intelligence designed  to automate and streamline the generation of detailed reports. At its core, it integrates **LLM-based agentic models** for intelligent reasoning, analysis, and report creation. 
 
 The system combines the power of **Chain of Thought (CoT)**, **Theory of Thought (ToT)**, and **Reasoning and Analysis Mechanisms (RAM)**. While not yet fully autonomous, it significantly reduces manual intervention, offering continuous upgrades and self-improvement through AI-driven feedback loops.
 
