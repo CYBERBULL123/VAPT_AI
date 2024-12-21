@@ -302,7 +302,7 @@ def render_main_app():
         # Heatmap: Severity vs Exploitation Likelihood
         st.write("🔴 **Heatmap: Severity vs Exploitation Likelihood**")
         pivot_df = df.pivot(index="Finding", columns="Severity", values="Exploitation Likelihood")
-        fig, ax = plt.subplots(figsize=(12, 8))
+        fig, ax = plt.subplots(figsize=(18, 20))
         sns.heatmap(pivot_df, annot=True, cmap='coolwarm', fmt='.1f', linewidths=0.5, ax=ax)
         ax.set_title("Severity vs Exploitation Likelihood", fontsize=14)
         st.pyplot(fig)
@@ -361,7 +361,7 @@ def render_main_app():
 
         # Line Chart: Exploitation Likelihood over Findings
         st.write("**Line Chart: Exploitation Likelihood over Findings**")
-        fig, ax = plt.subplots(figsize=(12, 8))
+        fig, ax = plt.subplots(figsize=(16, 10))
         sns.lineplot(data=df, x="Finding", y="Exploitation Likelihood", marker='o', color='cyan', ax=ax)
         ax.set_title("Exploitation Likelihood over Findings", fontsize=14)
         ax.set_xticklabels(df['Finding'], rotation=45, ha='right')
@@ -388,14 +388,12 @@ def render_main_app():
         return
 
 
-
-   # Handle report generation
     if submitted:
         try:
             # Initialize data to prevent undefined variable issues
             data = {}
 
-            # Collect data based on selected tab
+            # Collect data based on the selected tab
             if tabs == "🛡️ VAPT":
                 data = {
                     "project_name": project_name,
@@ -461,22 +459,11 @@ def render_main_app():
                 time.sleep(2)  # Simulate time for LLM processing
 
             # Store the report in the session state
-            session_key = f"{clean_tab_key}_report"
-            st.session_state[session_key] = report_content
-
-            # Display the report in a more structured preview
-            st.markdown("### Generated Report (Preview):")
-            st.markdown("---")
-            for section, content in report_content.items():
-                st.markdown(f"#### **{section}:**")
-                st.markdown(content if content else "_No data provided._")
-                st.markdown("---")
+            if "reports" not in st.session_state:
+                st.session_state.reports = {}
             
-            # Display the report in an expandable section
-            with st.expander("Generated Report"):
-                for section, content in st.session_state.get(session_key, {}).items():
-                    st.markdown(f"### **{section}:**")
-                    st.markdown(content if content else "_No data provided._")
+            # Use clean_tab_key as a unique identifier for the report
+            st.session_state.reports[clean_tab_key] = report_content
 
             # Generate HTML report
             template_file = f"backend/templates/{clean_tab_key.lower().replace(' ', '_')}_template.html"
@@ -495,6 +482,15 @@ def render_main_app():
         except Exception as e:
             st.error(f"An error occurred: {e}")
             print(e)
+
+    # Display all saved reports in expanders
+    if "reports" in st.session_state:
+        st.markdown("## Generated Reports")
+        for report_key, report_content in st.session_state.reports.items():
+            with st.expander(f"{report_key} Report"):
+                for section, content in report_content.items():
+                    st.markdown(f"### **{section}:**")
+                    st.markdown(content if content else "_No data provided._")
 
 
 

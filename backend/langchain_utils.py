@@ -286,9 +286,6 @@ def generate_report(report_type: str, data: dict) -> dict:
     # Generate refined response
     final_response = recursive_refinement(cot_prompt)
 
-    # Generate analytics data
-    analytics_data = generate_analytics(data)
-
     # Construct report
     report = {
         "Executive Summary": tot_responses[0],
@@ -297,7 +294,6 @@ def generate_report(report_type: str, data: dict) -> dict:
         "Recommendations": tot_responses[3],
         "Final Report": final_response,
         "Agent Reasoning Response": agent_response
-        # "Analytics": analytics_data
     }
 
     return report
