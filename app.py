@@ -24,7 +24,7 @@ def render_readme():
         readme_content = f.read()
     st.markdown(readme_content, unsafe_allow_html=True)
     # Wait for user input to proceed
-    if st.button('Start Cybersecurity Report Generator'):
+    if st.button('😳 Start the App'):
         # Set session state to true to indicate the button was clicked
         st.session_state.started = True
         # Rerun the app to load the main program
