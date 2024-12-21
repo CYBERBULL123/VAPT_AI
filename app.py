@@ -1,7 +1,10 @@
 import streamlit as st
-from backend.langchain_utils import generate_report
+from backend.langchain_utils import generate_report , generate_analytics
 from backend.report import generate_html_report
 import time
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Set up the page configuration
 st.set_page_config(
@@ -37,8 +40,8 @@ def render_main_app():
 
     # Using tabs with proper emojis
     tabs = st.radio(
-        "",
-        ("🛡️ VAPT", "🔐 Pentesting", "⚠️ Incident Response Plan", "✅ Compliance", "📊 Risk Assessment"),
+        "Choose Report",
+        ("🛡️ VAPT", "🔐 Pentesting", "⚠️ Incident Response Plan", "✅ Compliance", "📊 Risk Assessment", "📈 Analytics"),
         index=0,
         horizontal=True
     )
@@ -279,6 +282,113 @@ def render_main_app():
 
             submitted = st.form_submit_button("Generate Risk Assessment Report")
 
+    elif tabs == "📈 Analytics":
+        # Setting up the dark theme for the plots
+        plt.style.use('dark_background')
+
+        st.header("🔍 Comprehensive Analytics Dashboard")
+        st.write("Explore findings, severity, risk scores, and exploitation likelihood with detailed visualizations.")
+
+        # Load or process your actual findings data
+        # If no data provided, mock data will be used
+        analytics_data = generate_analytics(data={})
+        df = pd.DataFrame(analytics_data['structured_data'])
+
+        # Display the findings in a table
+        st.subheader("🔎 Findings Overview")
+        st.dataframe(df)
+        st.divider()
+
+        # Heatmap: Severity vs Exploitation Likelihood
+        st.write("🔴 **Heatmap: Severity vs Exploitation Likelihood**")
+        pivot_df = df.pivot(index="Finding", columns="Severity", values="Exploitation Likelihood")
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.heatmap(pivot_df, annot=True, cmap='coolwarm', fmt='.1f', linewidths=0.5, ax=ax)
+        ax.set_title("Severity vs Exploitation Likelihood", fontsize=14)
+        st.pyplot(fig)
+        st.divider()
+
+        # Bar Chart: Risk Scores by Severity
+        st.write("📊 **Bar Chart: Risk Scores by Severity**")
+        severity_risk_score = df.groupby('Severity')['Risk Score'].sum()
+        fig, ax = plt.subplots(figsize=(12, 8))
+        ax.bar(severity_risk_score.index, severity_risk_score.values, color=['#1f77b4', '#ff7f0e', '#2ca02c'])
+        ax.set_title("Risk Scores by Severity", fontsize=14)
+        ax.set_ylabel("Risk Score")
+        ax.set_xlabel("Severity")
+        st.pyplot(fig)
+        st.divider()
+
+        # Pie Chart: Findings by Severity
+        st.write("📝 **Pie Chart: Findings by Severity**")
+        severity_count = df['Severity'].value_counts()
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.pie(severity_count, labels=severity_count.index, autopct='%1.1f%%', startangle=90, colors=['#ff6347', '#ffa500', '#4caf50'])
+        ax.axis('equal')  # Equal aspect ratio ensures a circular pie chart
+        ax.set_title("Distribution of Findings by Severity", fontsize=14)
+        st.pyplot(fig)
+        st.divider()
+
+        # Scatterplot: Risk vs Exploitation Likelihood
+        st.write("📉 **Scatterplot: Risk vs Exploitation Likelihood**")
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.scatterplot(data=df, x="Risk Score", y="Exploitation Likelihood", hue="Severity", style="Severity", s=100, palette="viridis", ax=ax)
+        ax.set_title("Risk vs Exploitation Likelihood", fontsize=14)
+        ax.set_xlabel("Risk Score")
+        ax.set_ylabel("Exploitation Likelihood")
+        st.pyplot(fig)
+        st.divider()
+
+        # Additional Visualizations
+
+        # Histogram: Distribution of Risk Scores
+        st.write("**Histogram: Distribution of Risk Scores**")
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.histplot(df['Risk Score'], bins=10, kde=True, color="skyblue", ax=ax)
+        ax.set_title("Histogram of Risk Scores", fontsize=14)
+        st.pyplot(fig)
+        st.divider()
+
+        # Box Plot: Severity vs Risk Score
+        st.write("**Box Plot: Severity vs Risk Score**")
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.boxplot(data=df, x="Severity", y="Risk Score", palette="muted", ax=ax)
+        ax.set_title("Severity vs Risk Score", fontsize=14)
+        ax.set_xlabel("Severity")
+        ax.set_ylabel("Risk Score")
+        st.pyplot(fig)
+        st.divider()
+
+        # Line Chart: Exploitation Likelihood over Findings
+        st.write("**Line Chart: Exploitation Likelihood over Findings**")
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.lineplot(data=df, x="Finding", y="Exploitation Likelihood", marker='o', color='cyan', ax=ax)
+        ax.set_title("Exploitation Likelihood over Findings", fontsize=14)
+        ax.set_xticklabels(df['Finding'], rotation=45, ha='right')
+        st.pyplot(fig)
+        st.divider()
+
+        # Violin Plot: Severity vs Exploitation Likelihood
+        st.write("**Violin Plot: Severity vs Exploitation Likelihood**")
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.violinplot(data=df, x="Severity", y="Exploitation Likelihood", palette="dark", ax=ax)
+        ax.set_title("Severity vs Exploitation Likelihood", fontsize=14)
+        ax.set_xlabel("Severity")
+        ax.set_ylabel("Exploitation Likelihood")
+        st.pyplot(fig)
+        st.divider()
+
+        # Full-width section for insights
+        st.subheader("🔍 Key Insights")
+        st.write("""
+            - **High Severity Findings**: SQL Injection, Weak SSH Password, and Unpatched Apache Server are top priorities.
+            - **Exploitation Trends**: High-risk findings have the highest likelihood of exploitation.
+            - **Severity Analysis**: Focus on High severity issues as they dominate the dataset.
+        """)
+        return
+
+
+
    # Handle report generation
     if submitted:
         try:
@@ -350,6 +460,10 @@ def render_main_app():
                 report_content = generate_report(clean_tab_key, data)
                 time.sleep(2)  # Simulate time for LLM processing
 
+            # Store the report in the session state
+            session_key = f"{clean_tab_key}_report"
+            st.session_state[session_key] = report_content
+
             # Display the report in a more structured preview
             st.markdown("### Generated Report (Preview):")
             st.markdown("---")
@@ -357,6 +471,12 @@ def render_main_app():
                 st.markdown(f"#### **{section}:**")
                 st.markdown(content if content else "_No data provided._")
                 st.markdown("---")
+            
+            # Display the report in an expandable section
+            with st.expander("Generated Report"):
+                for section, content in st.session_state.get(session_key, {}).items():
+                    st.markdown(f"### **{section}:**")
+                    st.markdown(content if content else "_No data provided._")
 
             # Generate HTML report
             template_file = f"backend/templates/{clean_tab_key.lower().replace(' ', '_')}_template.html"
@@ -374,6 +494,7 @@ def render_main_app():
 
         except Exception as e:
             st.error(f"An error occurred: {e}")
+            print(e)
 
 
 

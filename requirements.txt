@@ -2,5 +2,7 @@ streamlit
 langchain
 requests
 jinja2
-plotly
+panda
+matplotlib
+seaborn
 langchain-google-genai

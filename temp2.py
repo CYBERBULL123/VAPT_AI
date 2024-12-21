@@ -2,9 +2,6 @@ import streamlit as st
 from backend.langchain_utils import generate_report
 from backend.report import generate_html_report
 import time
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # Set up the page configuration
 st.set_page_config(
@@ -33,21 +30,23 @@ def render_readme():
         # Rerun the app to load the main program
         st.rerun()
 
-
+# Function to render the main app with better UX and advanced layout
 def render_main_app():
     st.title("🛡️ **Advanced Cybersecurity Report Generator**")
     st.divider()
 
-    # Using tabs for better UX
-    st.caption("Choose tabs and scroll right for more options. ")
-    tabs = st.tabs(
-        ["🛡️ VAPT", "🔐 Pentesting", "⚠️ Incident Response Plan", "✅ Compliance", "📊 Risk Assessment", "📈 Analytics"]
+    # Using tabs with proper emojis
+    tabs = st.radio(
+        "",
+        ("🛡️ VAPT", "🔐 Pentesting", "⚠️ Incident Response Plan", "✅ Compliance", "📊 Risk Assessment"),
+        index=0,
+        horizontal=True
     )
     
     st.divider()
 
-    # VAPT Tab
-    with tabs[0]:
+    # Report forms based on selected tab
+    if tabs == "🛡️ VAPT":
         with st.form("vapt_form"):
             with st.expander("1. General Information", expanded=True):
                 project_name = st.text_input("Project Name", value="ACME Corp Web Application VAPT")
@@ -58,7 +57,7 @@ def render_main_app():
             with st.expander("2. Findings", expanded=False):
                 high_level_findings = st.text_area(
                     "High-Level Findings",
-                    value=( 
+                    value=(
                         "- Multiple input validation vulnerabilities identified.\n"
                         "- Weak password policy enforcement.\n"
                         "- Outdated third-party dependencies with known vulnerabilities."
@@ -66,7 +65,7 @@ def render_main_app():
                 )
                 detailed_findings = st.text_area(
                     "Detailed Findings",
-                    value=( 
+                    value=(
                         "1. **SQL Injection** on login page allowing unauthorized access.\n"
                         "   - Exploit: SQL payload bypassed authentication.\n"
                         "   - Impact: Access to sensitive user data.\n\n"
@@ -81,7 +80,7 @@ def render_main_app():
             with st.expander("3. Risk Analysis", expanded=False):
                 risk_description = st.text_area(
                     "Risk Description",
-                    value=( 
+                    value=(
                         "Exploitation of identified vulnerabilities could lead to:\n"
                         "- Data breaches.\n"
                         "- Financial loss due to reputation damage.\n"
@@ -90,7 +89,7 @@ def render_main_app():
                 )
                 business_impact = st.text_area(
                     "Business Impact",
-                    value=( 
+                    value=(
                         "- Compromise of customer data leading to loss of trust.\n"
                         "- Potential fines under GDPR for data exposure.\n"
                         "- Risk of operational downtime due to exploitation."
@@ -100,7 +99,7 @@ def render_main_app():
             with st.expander("4. Recommendations", expanded=False):
                 mitigation_strategies = st.text_area(
                     "Mitigation Strategies",
-                    value=( 
+                    value=(
                         "- Implement input validation and parameterized queries.\n"
                         "- Apply patches to outdated software and dependencies.\n"
                         "- Enforce strong password policies and multifactor authentication."
@@ -113,8 +112,7 @@ def render_main_app():
 
             submitted = st.form_submit_button("Generate VAPT Report")
 
-    # Pentesting Tab
-    with tabs[1]:
+    elif tabs == "🔐 Pentesting":
         with st.form("pentest_form"):
             with st.expander("1. General Information", expanded=True):
                 project_name = st.text_input("Project Name", value="ACME External Pentest")
@@ -125,7 +123,7 @@ def render_main_app():
             with st.expander("2. Findings", expanded=False):
                 high_level_findings = st.text_area(
                     "High-Level Findings",
-                    value=( 
+                    value=(
                         "- Open SSH port with weak credentials.\n"
                         "- No rate limiting on login endpoints.\n"
                         "- Default admin credentials still active on management portal."
@@ -133,7 +131,7 @@ def render_main_app():
                 )
                 detailed_findings = st.text_area(
                     "Detailed Findings",
-                    value=( 
+                    value=(
                         "1. **Weak SSH Password**\n"
                         "   - Exploit: Brute-forced SSH access.\n"
                         "   - Impact: Full server compromise.\n\n"
@@ -150,7 +148,7 @@ def render_main_app():
                 )
                 steps_taken = st.text_area(
                     "Steps Taken",
-                    value=( 
+                    value=(
                         "1. Identified open ports and services using Nmap.\n"
                         "2. Brute-forced SSH login with Hydra.\n"
                         "3. Exploited admin panel default credentials using manual testing."
@@ -160,7 +158,7 @@ def render_main_app():
             with st.expander("4. Recommendations", expanded=False):
                 mitigation_strategies = st.text_area(
                     "Mitigation Strategies",
-                    value=( 
+                    value=(
                         "- Disable default credentials and enforce password complexity.\n"
                         "- Apply rate limiting and lockout mechanisms on authentication endpoints.\n"
                         "- Monitor and audit access logs for anomalies."
@@ -173,15 +171,14 @@ def render_main_app():
 
             submitted = st.form_submit_button("Generate Pentest Report")
 
-    # Incident Response Plan Tab
-    with tabs[2]:
+    elif tabs == "⚠️ Incident Response Plan":
         with st.form("incident_response_form"):
             with st.expander("1. Incident Details", expanded=True):
                 incident_name = st.text_input("Incident Name", value="Ransomware Attack on Finance Systems")
                 incident_date = st.date_input("Incident Date")
                 incident_description = st.text_area(
                     "Incident Description",
-                    value=( 
+                    value=(
                         "A ransomware attack encrypted sensitive financial data, rendering it inaccessible. "
                         "The attack vector was traced to a phishing email targeting employees."
                     ),
@@ -190,7 +187,7 @@ def render_main_app():
             with st.expander("2. Actions Taken", expanded=False):
                 actions_taken = st.text_area(
                     "Actions Taken",
-                    value=( 
+                    value=(
                         "1. Isolated affected systems from the network.\n"
                         "2. Restored data from backups.\n"
                         "3. Notified employees and conducted post-incident forensics."
@@ -200,7 +197,7 @@ def render_main_app():
             with st.expander("3. Lessons Learned", expanded=False):
                 lessons_learned = st.text_area(
                     "Lessons Learned",
-                    value=( 
+                    value=(
                         "- Improve phishing awareness training.\n"
                         "- Enforce least privilege access.\n"
                         "- Implement endpoint detection and response tools."
@@ -215,8 +212,7 @@ def render_main_app():
 
             submitted = st.form_submit_button("Generate Incident Response Plan")
 
-    # Compliance Tab
-    with tabs[3]:
+    elif tabs == "✅ Compliance":
         with st.form("compliance_form"):
             with st.expander("1. General Information", expanded=True):
                 project_name = st.text_input("Project Name", value="ISO 27001 Compliance Assessment")
@@ -227,7 +223,7 @@ def render_main_app():
             with st.expander("2. Compliance Findings", expanded=False):
                 compliance_findings = st.text_area(
                     "Compliance Findings",
-                    value=( 
+                    value=(
                         "- Lack of a formal Information Security Policy.\n"
                         "- Absence of periodic risk assessments.\n"
                         "- Unencrypted storage of sensitive customer data."
@@ -237,7 +233,7 @@ def render_main_app():
             with st.expander("3. Recommendations", expanded=False):
                 compliance_recommendations = st.text_area(
                     "Recommendations",
-                    value=( 
+                    value=(
                         "- Establish and document an Information Security Policy.\n"
                         "- Conduct risk assessments biannually.\n"
                         "- Implement data encryption for sensitive data storage."
@@ -246,8 +242,7 @@ def render_main_app():
 
             submitted = st.form_submit_button("Generate Compliance Report")
 
-    # Risk Assessment Tab
-    with tabs[4]:
+    elif tabs == "📊 Risk Assessment":
         with st.form("risk_assessment_form"):
             with st.expander("1. General Information", expanded=True):
                 project_name = st.text_input("Project Name", value="Corporate Network Risk Assessment")
@@ -257,7 +252,7 @@ def render_main_app():
             with st.expander("2. Risk Details", expanded=False):
                 risks_identified = st.text_area(
                     "Risks Identified",
-                    value=( 
+                    value=(
                         "- Unpatched critical vulnerabilities in network devices.\n"
                         "- Lack of multifactor authentication for VPN access.\n"
                         "- Overly permissive file-sharing permissions."
@@ -265,7 +260,7 @@ def render_main_app():
                 )
                 risk_severity = st.text_area(
                     "Risk Severity",
-                    value=( 
+                    value=(
                         "1. High: Unpatched vulnerabilities in firewalls could lead to remote exploitation.\n"
                         "2. Medium: VPN access without MFA increases risk of credential theft exploitation.\n"
                         "3. Low: Overly permissive permissions increase internal data leakage risks."
@@ -275,7 +270,7 @@ def render_main_app():
             with st.expander("3. Mitigation Plan", expanded=False):
                 risk_mitigation_plan = st.text_area(
                     "Risk Mitigation Plan",
-                    value=( 
+                    value=(
                         "- Deploy patches for all critical vulnerabilities immediately.\n"
                         "- Enforce MFA for all remote access points.\n"
                         "- Review and restrict file-sharing permissions."
@@ -283,108 +278,6 @@ def render_main_app():
                 )
 
             submitted = st.form_submit_button("Generate Risk Assessment Report")
-
-    with tabs[5]:
-        # Setting up the dark theme
-        plt.style.use('dark_background')
-
-        st.header("🔍 Comprehensive Analytics Dashboard")
-        st.write("Explore findings, severity, risk scores, and exploitation likelihood with detailed visualizations.")
-
-        # Load or process your actual findings data
-        data = {
-            'Finding': ['SQL Injection', 'XSS', 'Unpatched Apache Server', 'Weak SSH Password', 'Default Admin Credentials'],
-            'Severity': ['High', 'Medium', 'High', 'High', 'High'],
-            'Impact': ['Access to sensitive data', 'Session Hijacking', 'Remote Code Execution', 'Full Server Compromise', 'Unauthorized Configuration Changes'],
-            'Risk Score': [9, 5, 10, 8, 7],
-            'Exploitation Likelihood': [8, 6, 9, 9, 8]
-        }
-        df = pd.DataFrame(data)
-
-        # Display the findings in a table
-        st.subheader("🔎 Findings Overview")
-        st.dataframe(df)
-        st.divider()
-
-        # Create a layout with two columns
-        col1, col2 = st.columns(2)
-
-        # Column 1: Heatmap and Bar Chart
-        with col1:
-            st.write("🔴 **Heatmap: Severity vs Exploitation Likelihood**")
-            pivot_df = df.pivot(index="Finding", columns="Severity", values="Exploitation Likelihood")
-            fig, ax = plt.subplots(figsize=(6, 4))
-            sns.heatmap(pivot_df, annot=True, cmap='coolwarm', fmt='.1f', linewidths=0.5, ax=ax)
-            ax.set_title("Severity vs Exploitation Likelihood", fontsize=10)
-            st.pyplot(fig)
-
-            st.write("📊 **Bar Chart: Risk Scores by Severity**")
-            severity_risk_score = df.groupby('Severity')['Risk Score'].sum()
-            fig, ax = plt.subplots(figsize=(6, 4))
-            ax.bar(severity_risk_score.index, severity_risk_score.values, color=['#1f77b4', '#ff7f0e', '#2ca02c'])
-            ax.set_title("Risk Scores by Severity", fontsize=10)
-            ax.set_ylabel("Risk Score")
-            ax.set_xlabel("Severity")
-            st.pyplot(fig)
-
-        # Column 2: Pie Chart and Scatterplot
-        with col2:
-            st.write("📝 **Pie Chart: Findings by Severity**")
-            severity_count = df['Severity'].value_counts()
-            fig, ax = plt.subplots(figsize=(6, 4))
-            ax.pie(severity_count, labels=severity_count.index, autopct='%1.1f%%', startangle=90, colors=['#ff6347', '#ffa500', '#4caf50'])
-            ax.axis('equal')  # Equal aspect ratio ensures a circular pie chart
-            ax.set_title("Distribution of Findings by Severity", fontsize=10)
-            st.pyplot(fig)
-
-            st.write("📉 **Scatterplot: Risk vs Exploitation Likelihood**")
-            fig, ax = plt.subplots(figsize=(6, 4))
-            sns.scatterplot(data=df, x="Risk Score", y="Exploitation Likelihood", hue="Severity", style="Severity", s=100, palette="viridis", ax=ax)
-            ax.set_title("Risk vs Exploitation Likelihood", fontsize=10)
-            ax.set_xlabel("Risk Score")
-            ax.set_ylabel("Exploitation Likelihood")
-            st.pyplot(fig)
-
-        # Additional Charts in New Rows
-        st.subheader("📊 Additional Visualizations")
-        col3, col4 = st.columns(2)
-
-        with col3:
-            st.write("**Histogram: Distribution of Risk Scores**")
-            fig, ax = plt.subplots(figsize=(6, 4))
-            sns.histplot(df['Risk Score'], bins=10, kde=True, color="skyblue", ax=ax)
-            ax.set_title("Histogram of Risk Scores", fontsize=10)
-            st.pyplot(fig)
-
-            st.write("**Box Plot: Severity vs Risk Score**")
-            fig, ax = plt.subplots(figsize=(6, 4))
-            sns.boxplot(data=df, x="Severity", y="Risk Score", palette="muted", ax=ax)
-            ax.set_title("Severity vs Risk Score", fontsize=10)
-            st.pyplot(fig)
-
-        with col4:
-            st.write("**Line Chart: Exploitation Likelihood over Findings**")
-            fig, ax = plt.subplots(figsize=(6, 4))
-            sns.lineplot(data=df, x="Finding", y="Exploitation Likelihood", marker='o', color='cyan', ax=ax)
-            ax.set_title("Exploitation Likelihood over Findings", fontsize=10)
-            ax.set_xticklabels(df['Finding'], rotation=45, ha='right')
-            st.pyplot(fig)
-
-            st.write("**Violin Plot: Severity vs Exploitation Likelihood**")
-            fig, ax = plt.subplots(figsize=(6, 4))
-            sns.violinplot(data=df, x="Severity", y="Exploitation Likelihood", palette="dark", ax=ax)
-            ax.set_title("Severity vs Exploitation Likelihood", fontsize=10)
-            st.pyplot(fig)
-
-        # Full-width section for insights
-        st.subheader("🔍 Key Insights")
-        st.write("""
-            - **High Severity Findings**: SQL Injection, Weak SSH Password, and Unpatched Apache Server are top priorities.
-            - **Exploitation Trends**: High-risk findings have the highest likelihood of exploitation.
-            - **Severity Analysis**: Focus on High severity issues as they dominate the dataset.
-        """)
-
-
 
    # Handle report generation
     if submitted:

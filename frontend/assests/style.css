@@ -172,6 +172,24 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     color: #195624;
 }
 
+/* Tab Styles */
+.stTabs [data-baseweb="tab"] {
+    font-weight: bold;
+    transition: transform 0.3s ease, color 0.3s ease, filter 0.3s ease; /* Smooth hover transition */
+    padding: 20px 30px;  /* Increased padding for larger tabs */
+    border-radius: 25px;
+    text-align: center;
+    margin: 10px;
+    font-size: 20px; /* Default font size */
+}
+
+/* Hover effect for tabs */
+.stTabs [data-baseweb="tab"]:hover {
+    transform: translateY(-5px) scale(1.5);  /* Move up and scale slightly */
+    color: #ff0400;  /* Change text color to cyan on hover */
+    filter: brightness(1.2) drop-shadow(0 0 15px rgba(4, 242, 4, 0.7)); /* Brightness increase with cyan glowing effect */
+}
+
 /* Blurred Glass Panels */
 .st-emotion-cache-1xw8zd0,
 .st-emotion-cache-qcpnpn {
