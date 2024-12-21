@@ -1,5 +1,6 @@
 # Ignore Python cache files
 __pycache__/
+testings
 
 # Ignore secrets.toml to keep API keys secure
 secrets.toml
