@@ -4,15 +4,15 @@ setup(
     name="OxSecure Intelligence",
     version="1.0.0",  # Update version as needed
     author="Aditya",
-    author_email="your_email@example.com",  # Replace with your email
+    author_email="opaadi98@gmail.com", 
     description="Automated Vulnerability Assessment and Penetration Testing (VAPT) Report Generation with Generative AI and Machine Learning",
-    long_description=open('README.md').read(),  # Assuming you have a README.md file with the project description
+    long_description=open('README.md').read(), 
     long_description_content_type="text/markdown",
-    url="https://github.com/CYBERBULL123/VAPT_AI",  # Replace with your GitHub URL
-    packages=find_packages(),  # Automatically find all packages in your project
+    url="https://github.com/CYBERBULL123/VAPT_AI", 
+    packages=find_packages(),  
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",  # You can change this based on your preferred license
+        "License :: OSI Approved :: MIT License", 
         "Operating System :: OS Independent",
     ],
     install_requires=[
@@ -21,7 +21,7 @@ setup(
         "langchain-google-genai",
         "jinja2"
         "plotly"
-        "requests",  # Add all the necessary dependencies here
+        "requests",  
     ],
     python_requires='>=3.6',
 )
