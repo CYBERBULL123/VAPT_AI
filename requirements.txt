@@ -3,6 +3,7 @@ langchain
 requests
 jinja2
 panda
+plotly
 matplotlib
 seaborn
 langchain-google-genai

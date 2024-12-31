@@ -4,7 +4,10 @@ from backend.report import generate_html_report
 import time
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
 import seaborn as sns
+import plotly.express as px
+import plotly.graph_objects as go
 
 # Set up the page configuration
 st.set_page_config(
@@ -290,102 +293,180 @@ def render_main_app():
         st.write("Explore findings, severity, risk scores, and exploitation likelihood with detailed visualizations.")
 
         # Load or process your actual findings data
-        # If no data provided, mock data will be used
         analytics_data = generate_analytics(data={})
         df = pd.DataFrame(analytics_data['structured_data'])
 
         # Display the findings in a table
         st.subheader("🔎 Findings Overview")
         st.dataframe(df)
+        st.download_button(
+            label="📥 Download Findings Data as CSV",
+            data=df.to_csv(index=False),
+            file_name="findings_data.csv",
+            mime="text/csv"
+        )
         st.divider()
 
-        # Heatmap: Severity vs Exploitation Likelihood
-        st.write("🔴 **Heatmap: Severity vs Exploitation Likelihood**")
-        pivot_df = df.pivot(index="Finding", columns="Severity", values="Exploitation Likelihood")
-        fig, ax = plt.subplots(figsize=(18, 20))
-        sns.heatmap(pivot_df, annot=True, cmap='coolwarm', fmt='.1f', linewidths=0.5, ax=ax)
-        ax.set_title("Severity vs Exploitation Likelihood", fontsize=14)
-        st.pyplot(fig)
-        st.divider()
+        # Add tabs for Plotly and Seaborn visualizations
+        plot_tab, seaborn_tab = st.tabs(["📊 Plotly Charts", "🎨 Seaborn Charts"])
 
-        # Bar Chart: Risk Scores by Severity
-        st.write("📊 **Bar Chart: Risk Scores by Severity**")
-        severity_risk_score = df.groupby('Severity')['Risk Score'].sum()
-        fig, ax = plt.subplots(figsize=(12, 8))
-        ax.bar(severity_risk_score.index, severity_risk_score.values, color=['#1f77b4', '#ff7f0e', '#2ca02c'])
-        ax.set_title("Risk Scores by Severity", fontsize=14)
-        ax.set_ylabel("Risk Score")
-        ax.set_xlabel("Severity")
-        st.pyplot(fig)
-        st.divider()
+        with plot_tab:
+            st.subheader("📊 Interactive Plotly Visualizations")
 
-        # Pie Chart: Findings by Severity
-        st.write("📝 **Pie Chart: Findings by Severity**")
-        severity_count = df['Severity'].value_counts()
-        fig, ax = plt.subplots(figsize=(8, 6))
-        ax.pie(severity_count, labels=severity_count.index, autopct='%1.1f%%', startangle=90, colors=['#ff6347', '#ffa500', '#4caf50'])
-        ax.axis('equal')  # Equal aspect ratio ensures a circular pie chart
-        ax.set_title("Distribution of Findings by Severity", fontsize=14)
-        st.pyplot(fig)
-        st.divider()
+            # 1. Heatmap: Severity vs Exploitation Likelihood
+            st.write("🔴 **Heatmap: Severity vs Exploitation Likelihood**")
+            st.caption("Outcome: This heatmap visualizes how exploitation likelihood varies across different severity levels and findings. It highlights the concentration of high exploitation likelihood within specific severities.")
+            pivot_df = df.pivot(index="Finding", columns="Severity", values="Exploitation Likelihood")
+            heatmap_fig = px.imshow(
+                pivot_df,
+                color_continuous_scale='viridis',
+                labels=dict(x="Severity", y="Finding", color="Exploitation Likelihood"),
+                title="Severity vs Exploitation Likelihood"
+            )
+            heatmap_fig.update_layout(width=700, height=500)
+            st.plotly_chart(heatmap_fig, use_container_width=True)
 
-        # Scatterplot: Risk vs Exploitation Likelihood
-        st.write("📉 **Scatterplot: Risk vs Exploitation Likelihood**")
-        fig, ax = plt.subplots(figsize=(12, 8))
-        sns.scatterplot(data=df, x="Risk Score", y="Exploitation Likelihood", hue="Severity", style="Severity", s=100, palette="viridis", ax=ax)
-        ax.set_title("Risk vs Exploitation Likelihood", fontsize=14)
-        ax.set_xlabel("Risk Score")
-        ax.set_ylabel("Exploitation Likelihood")
-        st.pyplot(fig)
-        st.divider()
+            # 2. Bar Chart: Risk Scores by Severity
+            st.write("📊 **Bar Chart: Risk Scores by Severity**")
+            st.caption("Outcome: This bar chart shows the aggregated risk scores for each severity level. It provides a clear comparison of which severity level contributes the most to overall risk.")
+            bar_fig = px.bar(
+                df.groupby('Severity')['Risk Score'].sum().reset_index(),
+                x='Severity',
+                y='Risk Score',
+                color='Severity',
+                title="Risk Scores by Severity"
+            )
+            st.plotly_chart(bar_fig, use_container_width=True)
 
-        # Additional Visualizations
+            # 3. Pie Chart: Findings by Severity
+            st.write("📝 **Pie Chart: Findings by Severity**")
+            st.caption("Outcome: This pie chart displays the proportion of findings classified under each severity level. It helps to identify which severities are most frequent.")
+            severity_count = df['Severity'].value_counts()
+            pie_fig = px.pie(
+                names=severity_count.index,
+                values=severity_count.values,
+                title="Distribution of Findings by Severity",
+                color_discrete_sequence=px.colors.sequential.RdBu
+            )
+            st.plotly_chart(pie_fig, use_container_width=True)
 
-        # Histogram: Distribution of Risk Scores
-        st.write("**Histogram: Distribution of Risk Scores**")
-        fig, ax = plt.subplots(figsize=(12, 8))
-        sns.histplot(df['Risk Score'], bins=10, kde=True, color="skyblue", ax=ax)
-        ax.set_title("Histogram of Risk Scores", fontsize=14)
-        st.pyplot(fig)
-        st.divider()
+            # 4. Scatter Plot: Risk vs Exploitation Likelihood
+            st.write("📉 **Scatter Plot: Risk vs Exploitation Likelihood**")
+            st.caption("Outcome: This scatter plot illustrates the relationship between risk scores and exploitation likelihood. It reveals clusters or trends, such as high-risk scores correlating with high likelihoods.")
+            scatter_fig = px.scatter(
+                df,
+                x="Risk Score",
+                y="Exploitation Likelihood",
+                color="Severity",
+                symbol="Severity",
+                size="Risk Score",
+                title="Risk vs Exploitation Likelihood"
+            )
+            st.plotly_chart(scatter_fig, use_container_width=True)
 
-        # Box Plot: Severity vs Risk Score
-        st.write("**Box Plot: Severity vs Risk Score**")
-        fig, ax = plt.subplots(figsize=(12, 8))
-        sns.boxplot(data=df, x="Severity", y="Risk Score", palette="muted", ax=ax)
-        ax.set_title("Severity vs Risk Score", fontsize=14)
-        ax.set_xlabel("Severity")
-        ax.set_ylabel("Risk Score")
-        st.pyplot(fig)
-        st.divider()
+            # 5. Line Chart: Exploitation Likelihood over Findings
+            st.write("📈 **Line Chart: Exploitation Likelihood over Findings**")
+            st.caption("Outcome: This line chart tracks how exploitation likelihood changes across findings, offering insights into patterns or outliers in the data.")
+            line_fig = px.line(
+                df,
+                x="Finding",
+                y="Exploitation Likelihood",
+                title="Exploitation Likelihood over Findings",
+                markers=True
+            )
+            line_fig.update_layout(xaxis_tickangle=-45)
+            st.plotly_chart(line_fig, use_container_width=True)
 
-        # Line Chart: Exploitation Likelihood over Findings
-        st.write("**Line Chart: Exploitation Likelihood over Findings**")
-        fig, ax = plt.subplots(figsize=(16, 10))
-        sns.lineplot(data=df, x="Finding", y="Exploitation Likelihood", marker='o', color='cyan', ax=ax)
-        ax.set_title("Exploitation Likelihood over Findings", fontsize=14)
-        ax.set_xticklabels(df['Finding'], rotation=45, ha='right')
-        st.pyplot(fig)
-        st.divider()
+            # 6. Histogram: Distribution of Risk Scores
+            st.write("📊 **Histogram: Distribution of Risk Scores**")
+            st.caption("Outcome: This histogram reveals the distribution of risk scores across findings, helping to identify whether risks are evenly spread or concentrated in certain ranges.")
+            hist_fig = px.histogram(
+                df,
+                x="Risk Score",
+                nbins=10,
+                title="Histogram of Risk Scores",
+                marginal="box"
+            )
+            st.plotly_chart(hist_fig, use_container_width=True)
 
-        # Violin Plot: Severity vs Exploitation Likelihood
-        st.write("**Violin Plot: Severity vs Exploitation Likelihood**")
-        fig, ax = plt.subplots(figsize=(12, 8))
-        sns.violinplot(data=df, x="Severity", y="Exploitation Likelihood", palette="dark", ax=ax)
-        ax.set_title("Severity vs Exploitation Likelihood", fontsize=14)
-        ax.set_xlabel("Severity")
-        ax.set_ylabel("Exploitation Likelihood")
-        st.pyplot(fig)
-        st.divider()
 
-        # Full-width section for insights
-        st.subheader("🔍 Key Insights")
-        st.write("""
-            - **High Severity Findings**: SQL Injection, Weak SSH Password, and Unpatched Apache Server are top priorities.
-            - **Exploitation Trends**: High-risk findings have the highest likelihood of exploitation.
-            - **Severity Analysis**: Focus on High severity issues as they dominate the dataset.
-        """)
+        with seaborn_tab:
+            st.subheader("🎨 Seaborn Visualizations")
+
+            # 1. Heatmap: Severity vs Exploitation Likelihood
+            st.write("🔴 **Heatmap: Severity vs Exploitation Likelihood**")
+            fig, ax = plt.subplots(figsize=(12, 8))
+            sns.heatmap(pivot_df, annot=True, cmap='coolwarm', fmt='.1f', linewidths=0.5, ax=ax)
+            ax.set_title("Severity vs Exploitation Likelihood", fontsize=14)
+            st.pyplot(fig)
+
+            # 2. Bar Plot: Risk Scores by Severity
+            st.write("📊 **Bar Plot: Risk Scores by Severity**")
+            fig, ax = plt.subplots(figsize=(12, 8))
+            sns.barplot(
+                x=df.groupby('Severity')['Risk Score'].sum().index,
+                y=df.groupby('Severity')['Risk Score'].sum().values,
+                palette="viridis",
+                ax=ax
+            )
+            ax.set_title("Risk Scores by Severity", fontsize=14)
+            ax.set_ylabel("Risk Score")
+            ax.set_xlabel("Severity")
+            st.pyplot(fig)
+
+            # 3. Pie Chart: Findings by Severity
+            st.write("📝 **Pie Chart: Findings by Severity**")
+            fig, ax = plt.subplots(figsize=(8, 6))
+            ax.pie(severity_count, labels=severity_count.index, autopct='%1.1f%%', startangle=90, colors=['#ff6347', '#ffa500', '#4caf50'])
+            ax.axis('equal')  # Equal aspect ratio ensures a circular pie chart
+            ax.set_title("Distribution of Findings by Severity", fontsize=14)
+            st.pyplot(fig)
+
+            # 4. Scatterplot: Risk vs Exploitation Likelihood
+            st.write("📉 **Scatterplot: Risk vs Exploitation Likelihood**")
+            fig, ax = plt.subplots(figsize=(12, 8))
+            sns.scatterplot(data=df, x="Risk Score", y="Exploitation Likelihood", hue="Severity", style="Severity", s=100, palette="viridis", ax=ax)
+            ax.set_title("Risk vs Exploitation Likelihood", fontsize=14)
+            ax.set_xlabel("Risk Score")
+            ax.set_ylabel("Exploitation Likelihood")
+            st.pyplot(fig)
+
+            # 5. Line Plot: Exploitation Likelihood over Findings
+            st.write("📈 **Line Plot: Exploitation Likelihood over Findings**")
+            fig, ax = plt.subplots(figsize=(16, 10))
+            sns.lineplot(data=df, x="Finding", y="Exploitation Likelihood", marker='o', color='cyan', ax=ax)
+            ax.set_title("Exploitation Likelihood over Findings", fontsize=14)
+            ax.set_xticklabels(df['Finding'], rotation=45, ha='right')
+            st.pyplot(fig)
+
+            # Histogram: Distribution of Risk Scores
+            st.write("**Histogram: Distribution of Risk Scores**")
+            fig, ax = plt.subplots(figsize=(12, 8))
+            sns.histplot(df['Risk Score'], bins=10, kde=True, color="skyblue", ax=ax)
+            ax.set_title("Histogram of Risk Scores", fontsize=14)
+            st.pyplot(fig)
+            st.divider()
+
+            # 6. Violin Plot: Severity vs Exploitation Likelihood
+            st.write("🎻 **Violin Plot: Severity vs Exploitation Likelihood**")
+            fig, ax = plt.subplots(figsize=(12, 8))
+            sns.violinplot(data=df, x="Severity", y="Exploitation Likelihood", palette="dark", ax=ax)
+            ax.set_title("Severity vs Exploitation Likelihood", fontsize=14)
+            ax.set_xlabel("Severity")
+            ax.set_ylabel("Exploitation Likelihood")
+            st.pyplot(fig)
+
+            # 7. Box Plot: Severity vs Risk Score
+            st.write("📦 **Box Plot: Severity vs Risk Score**")
+            fig, ax = plt.subplots(figsize=(12, 8))
+            sns.boxplot(data=df, x="Severity", y="Risk Score", palette="muted", ax=ax)
+            ax.set_title("Severity vs Risk Score", fontsize=14)
+            ax.set_xlabel("Severity")
+            ax.set_ylabel("Risk Score")
+            st.pyplot(fig)
         return
+
+
 
 
     if submitted:
