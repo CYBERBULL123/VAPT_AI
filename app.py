@@ -467,8 +467,6 @@ def render_main_app():
             st.markdown("""
              ### Insights and Impacts of Graphs
 
-            Below is a simplified and effective representation of the insights and impacts in a **table format** with appropriate emojis:
-
             | **Graph**                                    | **Insights**                                                                 | **Impacts**                                                                                                                |
             |----------------------------------------------|------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
             | 🔴 **Heatmap: Severity vs Exploitation Likelihood** | - High-severity vulnerabilities have the highest exploitation likelihood. <br> - Medium-severity findings show hidden risks. | - Attackers focus on high-likelihood issues for success. <br> - Immediate patching reduces exploitation chances.           |
@@ -485,7 +483,6 @@ def render_main_app():
             - 🔄 **Medium-risk findings** can enable lateral movement; don’t ignore them.
             - 📅 **Monitoring trends** in exploitation likelihood helps in proactive defense planning.
 
-            This table simplifies the information while keeping it impactful and engaging! Let me know if you’d like further refinements!
             """)
         return
 
