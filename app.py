@@ -465,23 +465,28 @@ def render_main_app():
             st.pyplot(fig)
             st.divider()
         st.markdown("""
-            ### Insights and Impacts of Graphs
+            ### 📊 Insights and Impacts of Visualizations
 
-        | **Graph**                                    | **Insights**                                                                 | **Impacts**                                                                                                                |
-        |----------------------------------------------|------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-        | 🔴 **Heatmap: Severity vs Exploitation Likelihood** | - High-severity vulnerabilities have the highest exploitation likelihood. <br> - Medium-severity findings show hidden risks. | - Attackers focus on high-likelihood issues for success. <br> - Immediate patching reduces exploitation chances.           |
-        | 📊 **Bar Chart: Risk Scores by Severity**    | - High-severity findings contribute most to the risk score. <br> - Medium-severity still holds notable risk.              | - Attackers target high-severity for impactful attacks. <br> - Allocate resources to reduce risks from top contributors.   |
-        | 📝 **Pie Chart: Findings by Severity**       | - High-severity findings are less frequent but pose critical threats. <br> - Medium/low findings dominate in volume.      | - Attackers exploit high-severity for high rewards. <br> - Focus on medium/low severity to prevent lateral movement.       |
-        | 📉 **Scatter Plot: Risk vs Exploitation Likelihood** | - Clustered high-risk, high-likelihood findings are critical. <br> - Low-likelihood findings still pose latent risks.     | - Attackers exploit high-risk clusters for immediate gains. <br> - Reduce risks to stay ahead of evolving attack methods.  |
-        | 📈 **Line Chart: Exploitation Likelihood Over Findings** | - Certain findings show consistent high exploitation likelihood. <br> - Fluctuations indicate situational risks.          | - Attackers prefer consistent high-likelihood targets. <br> - Use trends to identify areas needing periodic audits.        |
-        | 🟦 **Histogram: Distribution of Risk Scores** | - Most risk scores fall in a specific range (e.g., 60–80). <br> - Outliers (>90) represent urgent issues.                 | - Attackers target extreme risk outliers for major impact. <br> - Addressing outliers quickly reduces overall threat.      |
+            | **Visualization**                             | **Key Insights**                                                                                | **Potential Impacts**                                                                                 |
+            |-----------------------------------------------|-------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+            | 🔴 **Heatmap: Severity vs Exploitation Likelihood** | **Critical Zones:** High-severity vulnerabilities align with the highest exploitation likelihood. <br> **Hidden Risks:** Medium-severity findings can pose overlooked dangers. | 🚨 **Action Needed:** Attackers prioritize high-likelihood vulnerabilities for exploitation. <br> 🛠️ **Mitigation:** Patch high-severity issues immediately. |
+            | 📊 **Bar Chart: Risk Scores by Severity**     | **Risk Leaders:** High-severity issues dominate total risk scores. <br> Medium-severity also contributes significantly.         | 🎯 **Focus Areas:** Attackers exploit high-risk contributors first. <br> 📈 **Resource Allocation:** Prioritize mitigation strategies for top risk scores. |
+            | 📝 **Pie Chart: Findings by Severity**        | **Threat Breakdown:** High-severity findings are fewer but far more critical. <br> **Majority Share:** Medium/low-severity dominate in count. | 🔍 **Focus Shift:** High-severity issues are attacker favorites. <br> 🚧 **Preventative Measures:** Address medium/low-severity to block lateral movements. |
+            | 📉 **Scatter Plot: Risk vs Exploitation Likelihood** | **Critical Clusters:** High-risk, high-likelihood findings form key target zones. <br> **Subtle Threats:** Low-likelihood risks can evolve. | 🚩 **Primary Target:** Attackers exploit clustered vulnerabilities for maximum damage. <br> 🛡️ **Strategic Defense:** Minimize critical clusters proactively. |
+            | 📈 **Line Chart: Exploitation Likelihood Over Findings** | **Trending Risks:** Consistently high-likelihood findings highlight recurring vulnerabilities. <br> Fluctuating risks need constant monitoring. | 📅 **Audit Timelines:** Track trends to avoid recurring risks. <br> 🌟 **Proactive Defense:** Predict and address upcoming attack trends effectively. |
+            | 🟦 **Histogram: Distribution of Risk Scores** | **Risk Patterns:** Majority of findings fall within moderate risk ranges (e.g., 60–80). <br> Outliers (>90) are urgent concerns. | 🔥 **Priority Fixes:** Attackers target high-risk outliers for significant impacts. <br> 🚀 **Quick Wins:** Addressing outliers reduces the attack surface. |
 
-        ---
+            ---
 
-        ### Example Key Takeaways
-        - 🛡️ **High-severity vulnerabilities** demand immediate action to prevent critical exploitation.
-        - 🔄 **Medium-risk findings** can enable lateral movement; don’t ignore them.
-        - 📅 **Monitoring trends** in exploitation likelihood helps in proactive defense planning.
+            ### 🔑 Key Takeaways for Action
+            - 🛡️ **High-Severity Focus:** Address high-severity vulnerabilities immediately to neutralize critical threats.
+            - 🔄 **Medium-Risk Monitoring:** Medium-risk findings often act as stepping stones for attackers; ensure consistent management.
+            - 📊 **Trend Awareness:** Use exploitation likelihood trends to anticipate and mitigate future vulnerabilities.
+            - 🚀 **Resource Optimization:** Align resources to address critical clusters and reduce high-risk outliers effectively.
+
+            ---
+
+            ✨ **Remember:** Insightful visualizations are not just data—they're a blueprint for defense!
 
         """)
         return
