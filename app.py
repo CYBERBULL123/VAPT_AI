@@ -464,26 +464,26 @@ def render_main_app():
             ax.set_ylabel("Risk Score")
             st.pyplot(fig)
             st.divider()
-            st.markdown("""
-             ### Insights and Impacts of Graphs
+        st.markdown("""
+            ### Insights and Impacts of Graphs
 
-            | **Graph**                                    | **Insights**                                                                 | **Impacts**                                                                                                                |
-            |----------------------------------------------|------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-            | 🔴 **Heatmap: Severity vs Exploitation Likelihood** | - High-severity vulnerabilities have the highest exploitation likelihood. <br> - Medium-severity findings show hidden risks. | - Attackers focus on high-likelihood issues for success. <br> - Immediate patching reduces exploitation chances.           |
-            | 📊 **Bar Chart: Risk Scores by Severity**    | - High-severity findings contribute most to the risk score. <br> - Medium-severity still holds notable risk.              | - Attackers target high-severity for impactful attacks. <br> - Allocate resources to reduce risks from top contributors.   |
-            | 📝 **Pie Chart: Findings by Severity**       | - High-severity findings are less frequent but pose critical threats. <br> - Medium/low findings dominate in volume.      | - Attackers exploit high-severity for high rewards. <br> - Focus on medium/low severity to prevent lateral movement.       |
-            | 📉 **Scatter Plot: Risk vs Exploitation Likelihood** | - Clustered high-risk, high-likelihood findings are critical. <br> - Low-likelihood findings still pose latent risks.     | - Attackers exploit high-risk clusters for immediate gains. <br> - Reduce risks to stay ahead of evolving attack methods.  |
-            | 📈 **Line Chart: Exploitation Likelihood Over Findings** | - Certain findings show consistent high exploitation likelihood. <br> - Fluctuations indicate situational risks.          | - Attackers prefer consistent high-likelihood targets. <br> - Use trends to identify areas needing periodic audits.        |
-            | 🟦 **Histogram: Distribution of Risk Scores** | - Most risk scores fall in a specific range (e.g., 60–80). <br> - Outliers (>90) represent urgent issues.                 | - Attackers target extreme risk outliers for major impact. <br> - Addressing outliers quickly reduces overall threat.      |
+        | **Graph**                                    | **Insights**                                                                 | **Impacts**                                                                                                                |
+        |----------------------------------------------|------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+        | 🔴 **Heatmap: Severity vs Exploitation Likelihood** | - High-severity vulnerabilities have the highest exploitation likelihood. <br> - Medium-severity findings show hidden risks. | - Attackers focus on high-likelihood issues for success. <br> - Immediate patching reduces exploitation chances.           |
+        | 📊 **Bar Chart: Risk Scores by Severity**    | - High-severity findings contribute most to the risk score. <br> - Medium-severity still holds notable risk.              | - Attackers target high-severity for impactful attacks. <br> - Allocate resources to reduce risks from top contributors.   |
+        | 📝 **Pie Chart: Findings by Severity**       | - High-severity findings are less frequent but pose critical threats. <br> - Medium/low findings dominate in volume.      | - Attackers exploit high-severity for high rewards. <br> - Focus on medium/low severity to prevent lateral movement.       |
+        | 📉 **Scatter Plot: Risk vs Exploitation Likelihood** | - Clustered high-risk, high-likelihood findings are critical. <br> - Low-likelihood findings still pose latent risks.     | - Attackers exploit high-risk clusters for immediate gains. <br> - Reduce risks to stay ahead of evolving attack methods.  |
+        | 📈 **Line Chart: Exploitation Likelihood Over Findings** | - Certain findings show consistent high exploitation likelihood. <br> - Fluctuations indicate situational risks.          | - Attackers prefer consistent high-likelihood targets. <br> - Use trends to identify areas needing periodic audits.        |
+        | 🟦 **Histogram: Distribution of Risk Scores** | - Most risk scores fall in a specific range (e.g., 60–80). <br> - Outliers (>90) represent urgent issues.                 | - Attackers target extreme risk outliers for major impact. <br> - Addressing outliers quickly reduces overall threat.      |
 
-            ---
+        ---
 
-            ### Example Key Takeaways
-            - 🛡️ **High-severity vulnerabilities** demand immediate action to prevent critical exploitation.
-            - 🔄 **Medium-risk findings** can enable lateral movement; don’t ignore them.
-            - 📅 **Monitoring trends** in exploitation likelihood helps in proactive defense planning.
+        ### Example Key Takeaways
+        - 🛡️ **High-severity vulnerabilities** demand immediate action to prevent critical exploitation.
+        - 🔄 **Medium-risk findings** can enable lateral movement; don’t ignore them.
+        - 📅 **Monitoring trends** in exploitation likelihood helps in proactive defense planning.
 
-            """)
+        """)
         return
 
 
