@@ -54,65 +54,39 @@ def render_main_app():
     if tabs == "🛡️ VAPT":
         with st.form("vapt_form"):
             with st.expander("1. General Information", expanded=True):
-                project_name = st.text_input("Project Name", value="ACME Corp Web Application VAPT")
-                client_name = st.text_input("Client Name", value="ACME Corporation")
+                project_name = st.text_input("Project Name", placeholder="Enter the project name")
+                client_name = st.text_input("Client Name", placeholder="Enter the client name")
                 assessment_date = st.date_input("Assessment Date")
-                assessor_name = st.text_input("Assessor Name", value="John Smith")
+                assessor_name = st.text_input("Assessor Name", placeholder="Enter the assessor's name")
 
             with st.expander("2. Findings", expanded=False):
                 high_level_findings = st.text_area(
                     "High-Level Findings",
-                    value=(
-                        "- Multiple input validation vulnerabilities identified.\n"
-                        "- Weak password policy enforcement.\n"
-                        "- Outdated third-party dependencies with known vulnerabilities."
-                    ),
+                    placeholder="Enter high-level findings (e.g., vulnerabilities, weaknesses)",
                 )
                 detailed_findings = st.text_area(
                     "Detailed Findings",
-                    value=(
-                        "1. **SQL Injection** on login page allowing unauthorized access.\n"
-                        "   - Exploit: SQL payload bypassed authentication.\n"
-                        "   - Impact: Access to sensitive user data.\n\n"
-                        "2. **Cross-Site Scripting (XSS)** in search functionality.\n"
-                        "   - Exploit: JavaScript injection into browser context.\n"
-                        "   - Impact: Potential session hijacking.\n\n"
-                        "3. **Unpatched Apache Server** (CVE-2023-4567).\n"
-                        "   - Impact: Exploitable remote code execution vulnerability."
-                    ),
+                    placeholder="Provide detailed findings with exploit details and impact analysis",
                 )
 
             with st.expander("3. Risk Analysis", expanded=False):
                 risk_description = st.text_area(
                     "Risk Description",
-                    value=(
-                        "Exploitation of identified vulnerabilities could lead to:\n"
-                        "- Data breaches.\n"
-                        "- Financial loss due to reputation damage.\n"
-                        "- Non-compliance with regulatory requirements."
-                    ),
+                    placeholder="Describe the risks associated with the findings",
                 )
                 business_impact = st.text_area(
                     "Business Impact",
-                    value=(
-                        "- Compromise of customer data leading to loss of trust.\n"
-                        "- Potential fines under GDPR for data exposure.\n"
-                        "- Risk of operational downtime due to exploitation."
-                    ),
+                    placeholder="Explain the potential business impact of the risks",
                 )
 
             with st.expander("4. Recommendations", expanded=False):
                 mitigation_strategies = st.text_area(
                     "Mitigation Strategies",
-                    value=(
-                        "- Implement input validation and parameterized queries.\n"
-                        "- Apply patches to outdated software and dependencies.\n"
-                        "- Enforce strong password policies and multifactor authentication."
-                    ),
+                    placeholder="Provide strategies to mitigate the identified risks",
                 )
                 additional_notes = st.text_area(
                     "Additional Notes",
-                    value="Ensure regular vulnerability scans and patch management.",
+                    placeholder="Add any additional notes or observations",
                 )
 
             submitted = st.form_submit_button("Generate VAPT Report")
@@ -120,58 +94,39 @@ def render_main_app():
     elif tabs == "🔐 Pentesting":
         with st.form("pentest_form"):
             with st.expander("1. General Information", expanded=True):
-                project_name = st.text_input("Project Name", value="ACME External Pentest")
-                client_name = st.text_input("Client Name", value="ACME Corporation")
+                project_name = st.text_input("Project Name", placeholder="Enter the project name")
+                client_name = st.text_input("Client Name", placeholder="Enter the client name")
                 assessment_date = st.date_input("Assessment Date")
-                assessor_name = st.text_input("Assessor Name", value="Alice Johnson")
+                assessor_name = st.text_input("Assessor Name", placeholder="Enter the assessor's name")
 
             with st.expander("2. Findings", expanded=False):
                 high_level_findings = st.text_area(
                     "High-Level Findings",
-                    value=(
-                        "- Open SSH port with weak credentials.\n"
-                        "- No rate limiting on login endpoints.\n"
-                        "- Default admin credentials still active on management portal."
-                    ),
+                    placeholder="Summarize the high-level findings from the pentest",
                 )
                 detailed_findings = st.text_area(
                     "Detailed Findings",
-                    value=(
-                        "1. **Weak SSH Password**\n"
-                        "   - Exploit: Brute-forced SSH access.\n"
-                        "   - Impact: Full server compromise.\n\n"
-                        "2. **Default Credentials on Admin Panel**\n"
-                        "   - Exploit: Admin:admin login successful.\n"
-                        "   - Impact: Unauthorized configuration changes."
-                    ),
+                    placeholder="Provide detailed findings with exploit details and impact analysis",
                 )
 
             with st.expander("3. Exploitation Details", expanded=False):
                 tools_used = st.text_area(
                     "Tools Used",
-                    value="Nmap, Hydra, Metasploit, Burp Suite.",
+                    placeholder="List the tools used during the pentest",
                 )
                 steps_taken = st.text_area(
                     "Steps Taken",
-                    value=(
-                        "1. Identified open ports and services using Nmap.\n"
-                        "2. Brute-forced SSH login with Hydra.\n"
-                        "3. Exploited admin panel default credentials using manual testing."
-                    ),
+                    placeholder="Describe the steps taken during the exploitation process",
                 )
 
             with st.expander("4. Recommendations", expanded=False):
                 mitigation_strategies = st.text_area(
                     "Mitigation Strategies",
-                    value=(
-                        "- Disable default credentials and enforce password complexity.\n"
-                        "- Apply rate limiting and lockout mechanisms on authentication endpoints.\n"
-                        "- Monitor and audit access logs for anomalies."
-                    ),
+                    placeholder="Provide strategies to mitigate the identified vulnerabilities",
                 )
                 additional_notes = st.text_area(
                     "Additional Notes",
-                    value="Consider implementing a SIEM for centralized monitoring.",
+                    placeholder="Add any additional notes or observations",
                 )
 
             submitted = st.form_submit_button("Generate Pentest Report")
@@ -179,40 +134,29 @@ def render_main_app():
     elif tabs == "⚠️ Incident Response Plan":
         with st.form("incident_response_form"):
             with st.expander("1. Incident Details", expanded=True):
-                incident_name = st.text_input("Incident Name", value="Ransomware Attack on Finance Systems")
+                incident_name = st.text_input("Incident Name", placeholder="Enter the incident name")
                 incident_date = st.date_input("Incident Date")
                 incident_description = st.text_area(
                     "Incident Description",
-                    value=(
-                        "A ransomware attack encrypted sensitive financial data, rendering it inaccessible. "
-                        "The attack vector was traced to a phishing email targeting employees."
-                    ),
+                    placeholder="Describe the incident in detail",
                 )
 
             with st.expander("2. Actions Taken", expanded=False):
                 actions_taken = st.text_area(
                     "Actions Taken",
-                    value=(
-                        "1. Isolated affected systems from the network.\n"
-                        "2. Restored data from backups.\n"
-                        "3. Notified employees and conducted post-incident forensics."
-                    ),
+                    placeholder="List the actions taken during the incident response",
                 )
 
             with st.expander("3. Lessons Learned", expanded=False):
                 lessons_learned = st.text_area(
                     "Lessons Learned",
-                    value=(
-                        "- Improve phishing awareness training.\n"
-                        "- Enforce least privilege access.\n"
-                        "- Implement endpoint detection and response tools."
-                    ),
+                    placeholder="Summarize the lessons learned from the incident",
                 )
 
             with st.expander("4. Recommendations", expanded=False):
                 future_prevention = st.text_area(
                     "Future Prevention Strategies",
-                    value="Deploy advanced email filtering and improve incident response SOPs.",
+                    placeholder="Provide strategies to prevent similar incidents in the future",
                 )
 
             submitted = st.form_submit_button("Generate Incident Response Plan")
@@ -220,29 +164,21 @@ def render_main_app():
     elif tabs == "✅ Compliance":
         with st.form("compliance_form"):
             with st.expander("1. General Information", expanded=True):
-                project_name = st.text_input("Project Name", value="ISO 27001 Compliance Assessment")
-                client_name = st.text_input("Client Name", value="XYZ Inc.")
+                project_name = st.text_input("Project Name", placeholder="Enter the project name")
+                client_name = st.text_input("Client Name", placeholder="Enter the client name")
                 assessment_date = st.date_input("Assessment Date")
-                compliance_type = st.text_input("Compliance Type", value="ISO 27001")
+                compliance_type = st.text_input("Compliance Type", placeholder="Enter the compliance type (e.g., ISO 27001)")
 
             with st.expander("2. Compliance Findings", expanded=False):
                 compliance_findings = st.text_area(
                     "Compliance Findings",
-                    value=(
-                        "- Lack of a formal Information Security Policy.\n"
-                        "- Absence of periodic risk assessments.\n"
-                        "- Unencrypted storage of sensitive customer data."
-                    ),
+                    placeholder="List the compliance findings or gaps identified",
                 )
 
             with st.expander("3. Recommendations", expanded=False):
                 compliance_recommendations = st.text_area(
                     "Recommendations",
-                    value=(
-                        "- Establish and document an Information Security Policy.\n"
-                        "- Conduct risk assessments biannually.\n"
-                        "- Implement data encryption for sensitive data storage."
-                    ),
+                    placeholder="Provide recommendations to address compliance gaps",
                 )
 
             submitted = st.form_submit_button("Generate Compliance Report")
@@ -250,36 +186,24 @@ def render_main_app():
     elif tabs == "📊 Risk Assessment":
         with st.form("risk_assessment_form"):
             with st.expander("1. General Information", expanded=True):
-                project_name = st.text_input("Project Name", value="Corporate Network Risk Assessment")
-                client_name = st.text_input("Client Name", value="TechWorld LLC")
+                project_name = st.text_input("Project Name", placeholder="Enter the project name")
+                client_name = st.text_input("Client Name", placeholder="Enter the client name")
                 assessment_date = st.date_input("Assessment Date")
 
             with st.expander("2. Risk Details", expanded=False):
                 risks_identified = st.text_area(
                     "Risks Identified",
-                    value=(
-                        "- Unpatched critical vulnerabilities in network devices.\n"
-                        "- Lack of multifactor authentication for VPN access.\n"
-                        "- Overly permissive file-sharing permissions."
-                    ),
+                    placeholder="List the risks identified during the assessment",
                 )
                 risk_severity = st.text_area(
                     "Risk Severity",
-                    value=(
-                        "1. High: Unpatched vulnerabilities in firewalls could lead to remote exploitation.\n"
-                        "2. Medium: VPN access without MFA increases risk of credential theft exploitation.\n"
-                        "3. Low: Overly permissive permissions increase internal data leakage risks."
-                    ),
+                    placeholder="Describe the severity of each identified risk",
                 )
 
             with st.expander("3. Mitigation Plan", expanded=False):
                 risk_mitigation_plan = st.text_area(
                     "Risk Mitigation Plan",
-                    value=(
-                        "- Deploy patches for all critical vulnerabilities immediately.\n"
-                        "- Enforce MFA for all remote access points.\n"
-                        "- Review and restrict file-sharing permissions."
-                    ),
+                    placeholder="Provide a plan to mitigate the identified risks",
                 )
 
             submitted = st.form_submit_button("Generate Risk Assessment Report")
