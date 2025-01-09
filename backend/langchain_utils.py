@@ -4,11 +4,10 @@ from langchain.agents import initialize_agent, Tool, AgentType
 from langchain.memory import ConversationBufferMemory
 from langchain_google_genai import ChatGoogleGenerativeAI
 import streamlit as st
-
+import json
 
 # Configure API Key
 gemini_key = st.secrets["api_keys"]["gemini_api_key"]
-
 
 # Initialize GEMINI LLM for reasoning tasks
 llm = ChatGoogleGenerativeAI(
@@ -18,66 +17,84 @@ llm = ChatGoogleGenerativeAI(
     max_tokens=3000,  # Allow for detailed responses
 )
 
-# Define tools for the agent
-tools = [
-    Tool(
-        name="Analyze Findings",
-        func=lambda x: analyze_findings(x),
-        description=(
-            "Analyze cybersecurity findings to identify vulnerabilities, risks, and threats. "
-            "Provide a categorized analysis with potential impacts and related CVEs where applicable."
-        )
-    ),
-    Tool(
-        name="Evaluate Risks",
-        func=lambda x: evaluate_risks(x),
-        description=(
-            "Evaluate risks based on identified vulnerabilities. "
-            "Include severity, likelihood of exploitation, and potential business impacts."
-        )
-    ),
-    Tool(
-        name="Generate Recommendations",
-        func=lambda x: generate_recommendations(x),
-        description=(
-            "Generate actionable recommendations to mitigate identified risks. "
-            "Include preventive measures, detection strategies, and response plans."
-        )
-    ),
-    Tool(
-        name="Generate Analytics",
-        func=lambda x: generate_analytics(x),
-        description=(
-            "Generate analytics for the provided findings. "
-            "Returns key statistics, trends, and visual-ready data such as vulnerability distributions."
-        )
-    )
-]
-
-# Initialize the agent with tools
-agent = initialize_agent(
-    tools=tools,
-    llm=llm,
-    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    memory=ConversationBufferMemory(),
-    verbose=True
+# Initialize memory
+memory = ConversationBufferMemory(
+    memory_key="chat_history",
+    return_messages=True
 )
 
-# Reasoning Task: Using the agent to reason through findings
-def agent_reasoning_task(data: dict) -> str:
-    agent_input = f"Task: Analyze and process the following findings.\nInput: {data}"
-    response = agent.run(agent_input)
-    return response
-
-# Helper functions for agent tasks
+# Define tools for the agent
 def analyze_findings(data):
-    return f"Analyzing findings: {data}"
+    """
+    Analyze cybersecurity findings and categorize them.
+    """
+    try:
+        findings = data.get("findings", [])
+        if not findings:
+            return "No findings provided."
+        
+        # Categorize findings by severity
+        categorized_findings = {
+            "Critical": [],
+            "High": [],
+            "Medium": [],
+            "Low": []
+        }
+        for finding in findings:
+            severity = finding.get("severity", "Unknown")
+            if severity in categorized_findings:
+                categorized_findings[severity].append(finding)
+        
+        return json.dumps(categorized_findings, indent=2)
+    except Exception as e:
+        return f"Error analyzing findings: {str(e)}"
 
 def evaluate_risks(data):
-    return f"Evaluating risks: {data}"
+    """
+    Evaluate risks based on findings.
+    """
+    try:
+        findings = data.get("findings", [])
+        if not findings:
+            return "No findings provided."
+        
+        # Calculate risk scores
+        risk_scores = {
+            "Critical": 0,
+            "High": 0,
+            "Medium": 0,
+            "Low": 0
+        }
+        for finding in findings:
+            severity = finding.get("severity", "Unknown")
+            risk_score = finding.get("risk_score", 0)
+            if severity in risk_scores:
+                risk_scores[severity] += risk_score
+        
+        return json.dumps(risk_scores, indent=2)
+    except Exception as e:
+        return f"Error evaluating risks: {str(e)}"
 
 def generate_recommendations(data):
-    return f"Generating recommendations for: {data}"
+    """
+    Generate recommendations for mitigating risks.
+    """
+    try:
+        findings = data.get("findings", [])
+        if not findings:
+            return "No findings provided."
+        
+        recommendations = []
+        for finding in findings:
+            recommendation = {
+                "finding": finding.get("name", "Unknown"),
+                "recommendation": f"Mitigate {finding.get('severity', 'Unknown')} risk by implementing XYZ."
+            }
+            recommendations.append(recommendation)
+        
+        return json.dumps(recommendations, indent=2)
+    except Exception as e:
+        return f"Error generating recommendations: {str(e)}"
 
 def generate_analytics(data: dict) -> dict:
     """
@@ -172,6 +189,48 @@ def generate_analytics(data: dict) -> dict:
 
     return analytics_data
 
+tools = [
+    Tool(
+        name="Analyze Findings",
+        func=analyze_findings,
+        description="Analyze cybersecurity findings to identify vulnerabilities, risks, and threats."
+    ),
+    Tool(
+        name="Evaluate Risks",
+        func=evaluate_risks,
+        description="Evaluate risks based on identified vulnerabilities."
+    ),
+    Tool(
+        name="Generate Recommendations",
+        func=generate_recommendations,
+        description="Generate actionable recommendations to mitigate identified risks."
+    ),
+    Tool(
+        name="Generate Analytics",
+        func=generate_analytics,
+        description="Generate analytics for the provided findings."
+    )
+]
+
+# Initialize the agent with tools
+agent = initialize_agent(
+    tools=tools,
+    llm=llm,
+    agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    memory=memory,
+    verbose=True,
+    handle_parsing_errors=True  # Handle errors in tool parsing
+)
+
+# Reasoning Task: Using the agent to reason through findings
+def agent_reasoning_task(data: dict) -> str:
+    try:
+        agent_input = f"Task: Analyze and process the following findings.\nInput: {data}"
+        response = agent.run(agent_input)
+        return response
+    except Exception as e:
+        return f"Error in agent reasoning task: {str(e)}"
+
 # Chain-of-Thought (CoT) prompt generator
 def generate_cot_prompt(report_type: str, data: dict) -> str:
     report_prompts = {
@@ -247,9 +306,12 @@ def generate_cot_prompt(report_type: str, data: dict) -> str:
 def generate_tree_of_thought(data: dict, steps: list) -> list:
     responses = []
     for step in steps:
-        prompt = f"Step: {step}\nInput Data: {data}\n"
-        response = llm.predict(prompt)
-        responses.append(response)
+        try:
+            prompt = f"Step: {step}\nInput Data: {data}\n"
+            response = llm.predict(prompt)
+            responses.append(response)
+        except Exception as e:
+            responses.append(f"Error in step '{step}': {str(e)}")
     return responses
 
 # Recursive Action Planning (RAP)
@@ -260,40 +322,43 @@ def recursive_refinement(prompt: str, max_iterations: int = 3) -> str:
             response = llm.predict(current_prompt)
             current_prompt = f"Refine the following output:\n{response}"
         except Exception as e:
-            break
+            return f"Error in recursive refinement: {str(e)}"
     return current_prompt
 
 # Unified Report Generation Function
 def generate_report(report_type: str, data: dict) -> dict:
-    # Generate CoT prompt
-    cot_prompt = generate_cot_prompt(report_type, data)
+    try:
+        # Generate CoT prompt
+        cot_prompt = generate_cot_prompt(report_type, data)
 
-    # Define steps for Tree-of-Thought (ToT)
-    steps = {
-        "VAPT": ["Summarize vulnerabilities.", "Analyze risks.", "Propose remediation.", "Draft report."],
-        "Pentesting": ["Define scope.", "Detail findings.", "Propose fixes.", "Finalize report."],
-        "Incident Response Plan": ["Classify incidents.", "Describe workflow.", "Outline roles.", "Draft plan."],
-        "Compliance": ["Analyze framework.", "List findings.", "Propose compliance steps.", "Summarize."],
-        "Risk Assessment": ["Identify risks.", "Evaluate severity.", "Suggest mitigations.", "Summarize residual risks."]
-    }
+        # Define steps for Tree-of-Thought (ToT)
+        steps = {
+            "VAPT": ["Summarize vulnerabilities.", "Analyze risks.", "Propose remediation.", "Draft report."],
+            "Pentesting": ["Define scope.", "Detail findings.", "Propose fixes.", "Finalize report."],
+            "Incident Response Plan": ["Classify incidents.", "Describe workflow.", "Outline roles.", "Draft plan."],
+            "Compliance": ["Analyze framework.", "List findings.", "Propose compliance steps.", "Summarize."],
+            "Risk Assessment": ["Identify risks.", "Evaluate severity.", "Suggest mitigations.", "Summarize residual risks."]
+        }
 
-    # Agent reasoning task
-    agent_response = agent_reasoning_task(data)
+        # Agent reasoning task
+        agent_response = agent_reasoning_task(data)
 
-    # Generate Tree-of-Thought (ToT) responses
-    tot_responses = generate_tree_of_thought(data, steps[report_type])
+        # Generate Tree-of-Thought (ToT) responses
+        tot_responses = generate_tree_of_thought(data, steps[report_type])
 
-    # Generate refined response
-    final_response = recursive_refinement(cot_prompt)
+        # Generate refined response
+        final_response = recursive_refinement(cot_prompt)
 
-    # Construct report
-    report = {
-        "Executive Summary": tot_responses[0],
-        "Technical Findings": tot_responses[1],
-        "Risk Analysis": tot_responses[2],
-        "Recommendations": tot_responses[3],
-        "Final Report": final_response,
-        "Agent Reasoning Response": agent_response
-    }
+        # Construct report
+        report = {
+            "Executive Summary": tot_responses[0],
+            "Technical Findings": tot_responses[1],
+            "Risk Analysis": tot_responses[2],
+            "Recommendations": tot_responses[3],
+            "Final Report": final_response,
+            "Agent Reasoning Response": agent_response
+        }
 
-    return report
+        return report
+    except Exception as e:
+        return {"error": f"Error generating report: {str(e)}"}
