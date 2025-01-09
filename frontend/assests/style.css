@@ -126,15 +126,13 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     border: none;
     outline: none;
     border-radius: 6px;
-    background: rgba(25, 25, 25, 0.8);
+    background: rgba(2, 2, 2, 0.8);
     color: #00FF00;
-    box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.3);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .stTextInput input:focus,
 .stTextArea textarea:focus {
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
     transform: scale(1.02);
 }
 
@@ -199,9 +197,7 @@ h1:hover, h2:hover, h3:hover, h4:hover, h5:hover, h6:hover {
     padding: 2rem;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(12px);
-    border: 1px solid #00FF00;
     border-radius: 15px;
-    box-shadow: 0 6px 12px rgba(0, 255, 0, 0.465);
     text-align: center;
     transition: transform 0.4s ease;
 }
