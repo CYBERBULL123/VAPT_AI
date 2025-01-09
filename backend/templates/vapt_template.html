@@ -4,108 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ project_name }} - VAPT Report</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f7f9fc;
-            color: #333;
-            line-height: 1.6;
-        }
-        header {
-            background-color: #2C3E50;
-            color: white;
-            text-align: center;
-            padding: 30px 20px;
-            border-bottom: 5px solid #3498DB;
-        }
-        header h1 {
-            font-size: 32px;
-            margin: 0;
-        }
-        header p {
-            font-size: 18px;
-            margin: 5px 0;
-        }
-        .container {
-            padding: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            font-size: 24px;
-            color: #2C3E50;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #3498DB;
-            padding-bottom: 5px;
-        }
-        p {
-            margin: 10px 0;
-        }
-        .section {
-            margin-bottom: 40px;
-        }
-        .highlight {
-            background-color: #F4F6F7;
-            border-left: 5px solid #3498DB;
-            padding: 15px;
-            border-radius: 4px;
-            margin: 10px 0;
-        }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .table th, .table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        .table th {
-            background-color: #3498DB;
-            color: white;
-        }
-        .table td {
-            background-color: #f9f9f9;
-        }
-        footer {
-            background-color: #2C3E50;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-            font-size: 14px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../frontend/assests/report.css">
 </head>
 <body>
-    <header>
-        <h1>{{ project_name }} - Vulnerability Assessment & Penetration Testing (VAPT) Report</h1>
+    <!-- Dark Mode Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+
+    <header class="fade-in">
+        <h1>{{ project_name }} - Vulnerability Assessment Report</h1>
         <p><strong>Client Name:</strong> {{ client_name }}</p>
         <p><strong>Assessment Date:</strong> {{ assessment_date }}</p>
         <p><strong>Assessor:</strong> {{ assessor_name }}</p>
     </header>
 
-    <div class="container">
-        <section class="section">
+    <div class="container fade-in">
+        <!-- Executive Summary -->
+        <section>
             <h2>Executive Summary</h2>
-            <p>The VAPT assessment conducted for {{ client_name }} highlights key vulnerabilities identified within the system, their potential impact, and suggested remediation strategies. This report serves as a roadmap to improve the organization's security posture and minimize risks.</p>
             <div class="highlight">
-                <strong>Key Findings:</strong> {{ high_level_findings }}
+                <p>{{ summary }}</p>
+                <p>
+                    This section provides a high-level overview of the VAPT engagement, including the objectives, 
+                    methodology, and key findings. It is designed to give stakeholders a quick understanding of the 
+                    vulnerabilities identified and their potential impact on the organization.
+                </p>
+                <strong>Key Findings:</strong>
+                {% if findings %}
+                    <ul>
+                    {% for finding in findings[:3] %}
+                        <li>{{ finding.title }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No critical findings identified.</p>
+                {% endif %}
             </div>
         </section>
 
-        <section class="section">
+        <!-- Scope of Assessment -->
+        <section>
+            <h2>Scope of Assessment</h2>
+            <div class="highlight">
+                <p>
+                    This section defines the boundaries of the VAPT, including the systems, applications, and 
+                    environments that were evaluated. It ensures clarity on what was included in the assessment.
+                </p>
+                <p>The following items were included in the assessment scope:</p>
+                <ul>
+                    {% for item in scope_items %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <!-- Findings Overview -->
+        <section>
             <h2>Findings Overview</h2>
-            <table class="table">
+            <div class="highlight">
+                <p>
+                    This section details the vulnerabilities identified during the VAPT. Each finding is categorized 
+                    by severity, likelihood, and status, and includes a description of the potential impact. Findings 
+                    are prioritized to help focus remediation efforts.
+                </p>
+            </div>
+            <table>
                 <thead>
                     <tr>
-                        <th>Vulnerability</th>
+                        <th>Finding</th>
                         <th>Description</th>
                         <th>Severity</th>
                         <th>Likelihood</th>
@@ -113,55 +80,110 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for finding in detailed_findings %}
-                    <tr>
-                        <td>{{ finding.title }}</td>
-                        <td>{{ finding.description }}</td>
-                        <td>{{ finding.severity }}</td>
-                        <td>{{ finding.likelihood }}</td>
-                        <td>{{ finding.status }}</td>
-                    </tr>
-                    {% endfor %}
+                    {% if findings %}
+                        {% for finding in findings %}
+                        <tr>
+                            <td>{{ finding.title }}</td>
+                            <td>{{ finding.description }}</td>
+                            <td class="severity {{ finding.severity|lower }}">{{ finding.severity }}</td>
+                            <td>{{ finding.likelihood }}</td>
+                            <td>{{ finding.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="5">No findings recorded.</td></tr>
+                    {% endif %}
                 </tbody>
             </table>
         </section>
 
-        <section class="section">
+        <!-- Risk Analysis -->
+        <section>
             <h2>Risk Analysis</h2>
-            <p><strong>Risk Description:</strong> {{ risk_description }}</p>
             <div class="highlight">
-                <strong>Potential Impact:</strong> {{ potential_impact }}
+                <p>
+                    This section evaluates the risks associated with the identified vulnerabilities, including the 
+                    likelihood of exploitation and the potential impact on the organization. It provides a basis for 
+                    prioritizing remediation efforts.
+                </p>
+                <p><strong>Risk Description:</strong> {{ risk_description }}</p>
+                <p>{{ risk_analysis }}</p>
             </div>
         </section>
 
-        <section class="section">
+        <!-- Business Impact -->
+        <section>
             <h2>Business Impact</h2>
             <div class="highlight">
-                <strong>Impact on Operations:</strong> {{ business_impact }}
+                <p>
+                    This section assesses the potential impact of the identified vulnerabilities on the organization, 
+                    including financial, operational, and reputational consequences. It helps stakeholders understand 
+                    the severity of the risks.
+                </p>
+                <p>{{ business_impact }}</p>
+                {% if impacts %}
+                    <h3>Identified Impacts:</h3>
+                    <ul>
+                    {% for impact in impacts %}
+                        <li>{{ impact }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
-            <p>Mitigating these risks will safeguard critical operations and reduce exposure to potential cyberattacks.</p>
         </section>
 
-        <section class="section">
+        <!-- Mitigation Strategies -->
+        <section>
             <h2>Mitigation Strategies</h2>
-            <ul>
-                {% for strategy in mitigation_strategies %}
-                <li><strong>{{ strategy.title }}</strong>: {{ strategy.description }}</li>
+            <div class="highlight">
+                <p>
+                    This section provides actionable recommendations to mitigate the identified vulnerabilities. 
+                    Recommendations are prioritized based on their potential impact and feasibility, and include 
+                    both short-term and long-term solutions.
+                </p>
+            </div>
+            {% if strategies %}
+                <ul>
+                {% for strategy in strategies %}
+                    <li>
+                        <div class="highlight">
+                            <strong>{{ strategy.title }}:</strong> {{ strategy.description }}
+                            <p><strong>Priority:</strong> {{ strategy.priority }}</p>
+                            <p><strong>Timeline:</strong> {{ strategy.timeline }}</p>
+                        </div>
+                    </li>
                 {% endfor %}
-            </ul>
+                </ul>
+            {% else %}
+                <p>No mitigation strategies defined.</p>
+            {% endif %}
         </section>
 
+        <!-- Additional Notes -->
         {% if additional_notes %}
-        <section class="section">
-            <h2>Additional Notes</h2>
-            <p>{{ additional_notes }}</p>
-        </section>
+            <section>
+                <h2>Additional Notes</h2>
+                <div class="highlight">
+                    <p>
+                        This section includes any additional information or observations that may be relevant to the 
+                        VAPT. It provides context or clarifications that support the findings and recommendations.
+                    </p>
+                    <p>{{ additional_notes }}</p>
+                </div>
+            </section>
         {% endif %}
     </div>
 
-    <footer>
-        <p>Generated by OxSecure Intelligence on {{ assessment_date }}</p>
-        <p>Enhancing Security Through Intelligence & Automation</p>
+    <footer class="fade-in">
+        <p>Generated by <strong>OxSecure Intelligence</strong> on {{ assessment_date }}</p>
     </footer>
+
+    <script>
+        // Dark Mode Toggle
+        function toggleTheme() {
+            const body = document.body;
+            body.setAttribute('data-theme', body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        }
+    </script>
 </body>
 </html>

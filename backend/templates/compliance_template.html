@@ -4,147 +4,166 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ project_name }} - Compliance Report</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 40px;
-            background-color: #f4f6f8;
-            color: #333;
-            line-height: 1.6;
-        }
-        header, footer {
-            background-color: #2C3E50;
-            color: #fff;
-            text-align: center;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        header h1, footer p {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        h2 {
-            color: #2C3E50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-            margin-bottom: 20px;
-        }
-        h3 {
-            color: #34495E;
-            margin-bottom: 10px;
-        }
-        .section {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        .content p {
-            margin-bottom: 10px;
-        }
-        .findings, .recommendations, .risk-analysis, .compliance-details {
-            margin-top: 10px;
-        }
-        .findings p, .recommendations p, .risk-analysis p, .compliance-details p {
-            background-color: #f7f9fc;
-            border-left: 5px solid #3498db;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-        .critical {
-            background-color: #f9d6d5;
-            border-left: 5px solid #E74C3C;
-        }
-        .high {
-            background-color: #ffeaa7;
-            border-left: 5px solid #F39C12;
-        }
-        .medium {
-            background-color: #d6f5d6;
-            border-left: 5px solid #27AE60;
-        }
-        .low {
-            background-color: #eaf2f8;
-            border-left: 5px solid #3498DB;
-        }
-        footer p {
-            font-size: 0.9rem;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../frontend/assests/report.css">
 </head>
 <body>
-    <header>
-        <h1>{{ project_name }} - Compliance Report</h1>
+    <!-- Dark Mode Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+
+    <header class="fade-in">
+        <h1>{{ project_name }} - Compliance Assessment Report</h1>
         <p><strong>Client Name:</strong> {{ client_name }}</p>
         <p><strong>Assessment Date:</strong> {{ assessment_date }}</p>
         <p><strong>Assessor:</strong> {{ assessor_name }}</p>
     </header>
 
-    <section class="section">
-        <h2>Introduction</h2>
-        <p>{{ introduction }}</p>
-    </section>
-
-    <section class="section">
-        <h2>Executive Summary</h2>
-        <p>{{ summary }}</p>
-    </section>
-
-    <section class="section">
-        <h2>Compliance Findings</h2>
-        <div class="findings">
-            {% for finding in findings %}
-                <p class="{{ finding.severity.lower() }}">
-                    <strong>Finding:</strong> {{ finding.title }} <br>
-                    <strong>Description:</strong> {{ finding.description }} <br>
-                    <strong>Severity:</strong> {{ finding.severity }}
-                </p>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="section">
-        <h2>Risk Analysis</h2>
-        <div class="risk-analysis">
-            <p><strong>Risk Description:</strong> {{ risk_analysis }}</p>
-            <p><strong>Likelihood:</strong> {{ risk_likelihood }}</p>
-            <p><strong>Impact:</strong> {{ risk_impact }}</p>
-        </div>
-    </section>
-
-    <section class="section">
-        <h2>Compliance Details</h2>
-        <div class="compliance-details">
-            <p><strong>Applicable Standards:</strong> {{ compliance_standards }}</p>
-            <p><strong>Business Impact:</strong> {{ business_impact }}</p>
-            <p><strong>Gaps Identified:</strong> {{ gaps_identified }}</p>
-        </div>
-    </section>
-
-    <section class="section">
-        <h2>Recommendations</h2>
-        <div class="recommendations">
-            {% for recommendation in recommendations %}
+    <div class="container fade-in">
+        <!-- Executive Summary -->
+        <section>
+            <h2>Executive Summary</h2>
+            <p>{{ summary }}</p>
+            <div class="highlight">
                 <p>
-                    <strong>Recommendation:</strong> {{ recommendation.title }} <br>
-                    <strong>Description:</strong> {{ recommendation.description }}
+                    This section provides a high-level overview of the compliance assessment, including the objectives, methodology, and key findings. 
+                    It is designed to give stakeholders a quick understanding of the assessment's outcomes and their implications.
                 </p>
-            {% endfor %}
-        </div>
-    </section>
+                <strong>Key Findings:</strong>
+                {% if findings %}
+                    <ul>
+                    {% for finding in findings[:3] %}
+                        <li>{{ finding.title }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No critical findings identified.</p>
+                {% endif %}
+            </div>
+        </section>
 
-    {% if additional_notes %}
-    <section class="section">
-        <h2>Additional Notes</h2>
-        <p>{{ additional_notes }}</p>
-    </section>
-    {% endif %}
+        <!-- Scope and Standards -->
+        <section>
+            <h2>Scope and Standards</h2>
+            <div class="highlight">
+                <p>
+                    The scope defines the boundaries of the compliance assessment, including the systems, processes, and assets evaluated. 
+                    The standards section lists the regulatory frameworks and compliance requirements that were assessed.
+                </p>
+                <p><strong>Compliance Standards:</strong></p>
+                {% if compliances %}
+                    <ul>
+                    {% for compliance in compliances %}
+                        <li>{{ compliance }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No compliance standards specified.</p>
+                {% endif %}
+            </div>
+        </section>
 
-    <footer>
-        <p>Report Generated on {{ assessment_date }}</p>
-        <p><strong>OxSecure Intelligence</strong> - Your Trusted Compliance Partner</p>
+        <!-- Findings -->
+        <section>
+            <h2>Findings</h2>
+            <div class="highlight">
+                <p>
+                    This section details the compliance findings identified during the assessment. Each finding is categorized by severity, 
+                    and includes a description, potential impact, and current status. Findings are prioritized to help focus remediation efforts.
+                </p>
+            </div>
+            {% if findings %}
+                {% for finding in findings %}
+                    <div class="highlight">
+                        <h3 class="severity {{ finding.severity|lower }}">{{ finding.title }}</h3>
+                        <p><strong>Description:</strong> {{ finding.description }}</p>
+                        <p><strong>Severity:</strong> <span class="severity {{ finding.severity|lower }}">{{ finding.severity }}</span></p>
+                        <p><strong>Impact:</strong> {{ finding.impact }}</p>
+                        <p><strong>Recommendation:</strong> {{ finding.recommendation }}</p>
+                        {% if finding.status %}<p><strong>Status:</strong> {{ finding.status }}</p>{% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No compliance findings recorded.</p>
+            {% endif %}
+        </section>
+
+        <!-- Risk Analysis -->
+        <section>
+            <h2>Risk Analysis</h2>
+            <div class="highlight">
+                <p>
+                    The risk analysis evaluates the likelihood and impact of each identified risk. It provides a detailed assessment of how 
+                    these risks could affect the organization and its compliance posture. This section helps prioritize risks for mitigation.
+                </p>
+                <p>{{ risk_analysis }}</p>
+                <p><strong>Risk Likelihood:</strong> {{ risk_likelihood }}</p>
+                <p><strong>Risk Impact:</strong> {{ risk_impact }}</p>
+            </div>
+        </section>
+
+        <!-- Recommendations -->
+        <section>
+            <h2>Recommendations</h2>
+            <div class="highlight">
+                <p>
+                    This section provides actionable recommendations to address the identified compliance gaps and risks. 
+                    Recommendations are prioritized based on severity and potential impact, and include both short-term and long-term solutions.
+                </p>
+            </div>
+            {% if recommendations %}
+                {% for recommendation in recommendations %}
+                    <div class="highlight">
+                        <h3>{{ recommendation.title }}</h3>
+                        <p><strong>Description:</strong> {{ recommendation.description }}</p>
+                        <p><strong>Priority:</strong> {{ recommendation.priority }}</p>
+                        <p><strong>Timeline:</strong> {{ recommendation.timeline }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No recommendations provided.</p>
+            {% endif %}
+        </section>
+
+        <!-- Gaps Identified -->
+        {% if gaps_identified %}
+            <section>
+                <h2>Gaps Identified</h2>
+                <div class="highlight">
+                    <p>
+                        This section highlights the gaps between the current state of compliance and the desired state as defined by the 
+                        applicable standards. It provides a clear picture of areas requiring improvement.
+                    </p>
+                    <p>{{ gaps_identified }}</p>
+                </div>
+            </section>
+        {% endif %}
+
+        <!-- Additional Notes -->
+        {% if additional_notes %}
+            <section>
+                <h2>Additional Notes</h2>
+                <div class="highlight">
+                    <p>
+                        This section includes any additional information or observations that may be relevant to the compliance assessment. 
+                        It provides context or clarifications that support the findings and recommendations.
+                    </p>
+                    <p>{{ additional_notes }}</p>
+                </div>
+            </section>
+        {% endif %}
+    </div>
+
+    <footer class="fade-in">
+        <p>Generated by <strong>OxSecure Intelligence</strong> on {{ assessment_date }}</p>
+        <p>Your Trusted Compliance Partner</p>
     </footer>
+
+    <script>
+        // Dark Mode Toggle
+        function toggleTheme() {
+            const body = document.body;
+            body.setAttribute('data-theme', body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        }
+    </script>
 </body>
 </html>

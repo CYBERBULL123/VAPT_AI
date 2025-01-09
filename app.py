@@ -322,7 +322,7 @@ def render_main_app():
                 labels=dict(x="Severity", y="Finding", color="Exploitation Likelihood"),
                 title="Severity vs Exploitation Likelihood"
             )
-            heatmap_fig.update_layout(width=700, height=500)
+            heatmap_fig.update_layout(width=700, height=800)
             st.plotly_chart(heatmap_fig, use_container_width=True)
 
             # 2. Bar Chart: Risk Scores by Severity
@@ -464,6 +464,7 @@ def render_main_app():
             ax.set_ylabel("Risk Score")
             st.pyplot(fig)
             st.divider()
+
         st.markdown("""
             ### 📊 Insights and Impacts of Visualizations
 

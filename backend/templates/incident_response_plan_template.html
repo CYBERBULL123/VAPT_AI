@@ -4,171 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ project_name }} - Incident Response Report</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f7f9fc;
-            color: #333;
-            line-height: 1.6;
-        }
-        header {
-            background-color: #2C3E50;
-            color: white;
-            text-align: center;
-            padding: 30px 20px;
-            border-bottom: 5px solid #3498DB;
-        }
-        header h1 {
-            font-size: 32px;
-            margin: 0;
-        }
-        header p {
-            font-size: 18px;
-            margin: 5px 0;
-        }
-        .container {
-            padding: 40px;
-            max-width: 1200px;
-            margin: 20px auto;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            font-size: 24px;
-            color: #2C3E50;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #3498DB;
-            padding-bottom: 5px;
-        }
-        h3 {
-            font-size: 20px;
-            color: #34495E;
-            margin-top: 20px;
-        }
-        p {
-            margin: 10px 0;
-        }
-        .highlight {
-            background-color: #F4F6F7;
-            border-left: 5px solid #3498DB;
-            padding: 15px;
-            border-radius: 4px;
-            margin: 10px 0;
-        }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .table th, .table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        .table th {
-            background-color: #3498DB;
-            color: white;
-        }
-        .table td {
-            background-color: #f9f9f9;
-        }
-        .findings, .response-actions, .recommendations, .risk-analysis {
-            margin-top: 10px;
-        }
-        .findings p, .response-actions p, .recommendations p, .risk-analysis p {
-            background-color: #ecf0f1;
-            border-left: 5px solid #3498db;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 3px;
-        }
-        .risk-analysis {
-            background-color: #f9e79f;
-            padding: 10px;
-            border-left: 5px solid #f39c12;
-            margin: 10px 0;
-            border-radius: 3px;
-        }
-        .response-actions {
-            background-color: #f1c40f;
-            padding: 10px;
-            border-left: 5px solid #e67e22;
-            margin: 10px 0;
-            border-radius: 3px;
-        }
-        footer {
-            background-color: #2C3E50;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-            font-size: 14px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../frontend/assests/report.css">
 </head>
 <body>
-    <header>
+    <!-- Dark Mode Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+
+    <header class="fade-in">
         <h1>{{ project_name }} - Incident Response Report</h1>
         <p><strong>Client Name:</strong> {{ client_name }}</p>
         <p><strong>Assessment Date:</strong> {{ assessment_date }}</p>
         <p><strong>Assessor:</strong> {{ assessor_name }}</p>
     </header>
 
-    <div class="container">
+    <div class="container fade-in">
+        <!-- Executive Summary -->
         <section>
             <h2>Executive Summary</h2>
-            <p>{{ summary }}</p>
             <div class="highlight">
-                <strong>Key Findings:</strong> {{ findings }}
+                <p>{{ summary }}</p>
+                <p>
+                    This section provides a high-level overview of the incident, including the nature of the incident, 
+                    the response actions taken, and the overall impact on the organization. It is designed to give 
+                    stakeholders a quick understanding of the incident and its resolution.
+                </p>
             </div>
         </section>
 
+        <!-- Incident Description -->
         <section>
             <h2>Incident Description</h2>
-            <div class="findings">
+            <div class="highlight">
+                <p>
+                    This section provides a detailed description of the incident, including how it was detected, 
+                    the timeline of events, and the systems or processes affected. It helps stakeholders understand 
+                    the scope and nature of the incident.
+                </p>
                 <p>{{ incident_description }}</p>
             </div>
         </section>
 
+        <!-- Response Actions Taken -->
         <section>
-            <h2>Response Actions</h2>
-            <div class="response-actions">
+            <h2>Response Actions Taken</h2>
+            <div class="highlight">
+                <p>
+                    This section outlines the steps taken to respond to the incident, including containment, 
+                    eradication, and recovery efforts. It provides a clear picture of how the incident was managed 
+                    and resolved.
+                </p>
                 <p>{{ response_actions }}</p>
             </div>
         </section>
 
+        <!-- Impact Analysis -->
+        <section>
+            <h2>Impact Analysis</h2>
+            <div class="highlight">
+                <p>
+                    This section evaluates the impact of the incident on the organization, including financial, 
+                    operational, and reputational consequences. It helps stakeholders understand the severity of 
+                    the incident and its implications.
+                </p>
+                <h3>Business Impact</h3>
+                <p>{{ business_impact }}</p>
+                {% if impacts %}
+                    <h3>Identified Impacts:</h3>
+                    <ul>
+                    {% for impact in impacts %}
+                        <li>{{ impact }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Risk Analysis -->
         <section>
             <h2>Risk Analysis</h2>
-            <div class="risk-analysis">
+            <div class="highlight">
+                <p>
+                    This section assesses the risks associated with the incident, including the likelihood of 
+                    recurrence and the potential impact on the organization. It provides a basis for prioritizing 
+                    future risk mitigation efforts.
+                </p>
                 <p>{{ risk_analysis }}</p>
+                {% if risk_likelihood and risk_impact %}
+                    <p><strong>Risk Likelihood:</strong> {{ risk_likelihood }}</p>
+                    <p><strong>Risk Impact:</strong> {{ risk_impact }}</p>
+                {% endif %}
             </div>
         </section>
 
+        <!-- Recommendations -->
         <section>
             <h2>Recommendations</h2>
-            <ul>
+            <div class="highlight">
+                <p>
+                    This section provides actionable recommendations to prevent similar incidents in the future. 
+                    Recommendations are prioritized based on their potential impact and feasibility, and include 
+                    both short-term and long-term solutions.
+                </p>
+            </div>
+            {% if recommendations %}
+                <ul>
                 {% for recommendation in recommendations %}
-                    <li><strong>{{ recommendation.title }}:</strong> {{ recommendation.description }}</li>
+                    <li>
+                        <div class="highlight">
+                            <strong>{{ recommendation.title }}</strong>
+                            <p>{{ recommendation.description }}</p>
+                            <p><strong>Priority:</strong> {{ recommendation.priority }}</p>
+                            <p><strong>Timeline:</strong> {{ recommendation.timeline }}</p>
+                        </div>
+                    </li>
                 {% endfor %}
-            </ul>
+                </ul>
+            {% else %}
+                <p>No recommendations provided.</p>
+            {% endif %}
         </section>
 
+        <!-- Additional Notes -->
         {% if additional_notes %}
-        <section>
-            <h2>Additional Notes</h2>
-            <div class="response-actions">
-                <p>{{ additional_notes }}</p>
-            </div>
-        </section>
+            <section>
+                <h2>Additional Notes</h2>
+                <div class="highlight">
+                    <p>
+                        This section includes any additional information or observations that may be relevant to 
+                        the incident response. It provides context or clarifications that support the findings 
+                        and recommendations.
+                    </p>
+                    <p>{{ additional_notes }}</p>
+                </div>
+            </section>
         {% endif %}
     </div>
 
-    <footer>
-        <p>Generated by OxSecure Intelligence on {{ assessment_date }}</p>
-        <p>Empowering Organizations with Intelligent Security Solutions</p>
+    <footer class="fade-in">
+        <p>Generated by <strong>OxSecure Intelligence</strong> on {{ assessment_date }}</p>
+        <p>Empowering Organizations with Intelligent Incident Response</p>
     </footer>
+
+    <script>
+        // Dark Mode Toggle
+        function toggleTheme() {
+            const body = document.body;
+            body.setAttribute('data-theme', body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        }
+    </script>
 </body>
 </html>
